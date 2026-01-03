@@ -36,7 +36,7 @@ export default function AboutMeSection() {
             >
               <div className="relative w-full h-full overflow-hidden rounded-2xl">
                 <img
-                  src="src/assets/aboutme/aboutme.png"
+                  src="public/aboutme/aboutme.png"
                   alt="Team collaboration"
                   className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                 />
