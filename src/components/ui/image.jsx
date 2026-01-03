@@ -1,9 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 export default function MainImage() {
   return (
-    <div className="relative w-50 h-50 sm:w-80 mb-2 sm:h-80 lg:w-90 lg:h-90">
+    <div className="relative w-50 h-50 sm:w-70  mb-2 sm:h-70 lg:w-90 lg:h-90">
       <motion.div
-        className="absolute inset-0 rounded-full bg-linear-to-br from-blue-400 via-blue-500 to-blue-600 opacity-50 blur-2xl"
+        className="absolute inset-0 rounded-full bg-linear-to-br  from-blue-400 via-blue-500 to-blue-600 opacity-50 "
         animate={{
           scale: [1, 1.2, 1],
           rotate: [0, 180, 360],

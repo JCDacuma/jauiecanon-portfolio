@@ -7,22 +7,22 @@ export default function AboutMeSection() {
   return (
     <section
       id="about"
-      className="min-h-screen flex items-center py-20 px-2 sm:px-6 lg:px-8 bg-white/50"
+      className="min-h-screen flex  items-center sm:py-20 px-2 sm:px-6 lg:px-8 bg-white/50"
     >
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 1 }}
+          className="text-center sm:mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
             About <span className="text-blue-600">Me</span>
           </h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid  md:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -80,30 +80,62 @@ export default function AboutMeSection() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="space-y-6"
           >
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
-              <h3 className="text-xl sm:text-2xl text-center font-bold mb-4 text-gray-800">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              whileHover={{ y: -4 }}
+              className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm hover:shadow-md border border-gray-100 transition-all duration-300"
+            >
+              <motion.h3
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-xl sm:text-2xl text-center font-bold mb-6 text-gray-800"
+              >
                 Professional Journey
-              </h3>
-              <p className="text-gray-600 text-center  leading-relaxed mb-4">
-                As a passionate Full Stack Web Developer, I specialize in
-                creating modern, responsive, and user-friendly web applications.
-                With a strong foundation in both front-end and back-end
-                technologies, I bring ideas to life through clean code and
-                innovative solutions.
-              </p>
-              <p className="text-gray-600 text-center leading-relaxed">
-                My journey in technology is driven by curiosity and a commitment
-                to continuous learning. I thrive on challenges and enjoy
-                collaborating with teams to build impactful digital experiences.
-              </p>
-            </div>
-            <StatsOverView />
+              </motion.h3>
+
+              <motion.div className="space-y-4">
+                <motion.p
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
+                  className="text-gray-600 text-center leading-relaxed"
+                >
+                  As a passionate Full Stack Web Developer, I specialize in
+                  creating modern, responsive, and user-friendly web
+                  applications. With a strong foundation in both front-end and
+                  back-end technologies, I bring ideas to life through clean
+                  code and innovative solutions.
+                </motion.p>
+
+                <motion.p
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+                  className="text-gray-600 text-center leading-relaxed"
+                >
+                  My journey in technology is driven by curiosity and a
+                  commitment to continuous learning. I thrive on challenges and
+                  enjoy collaborating with teams to build impactful digital
+                  experiences.
+                </motion.p>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
+            >
+              <StatsOverView />
+            </motion.div>
           </motion.div>
         </div>
       </div>

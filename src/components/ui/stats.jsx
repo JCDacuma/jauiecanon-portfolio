@@ -65,18 +65,17 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = "", label }) => {
   return (
     <div
       ref={ref}
-      className="group bg-linear-to-br from-blue-500 to-indigo-600 py-3 items-center px-5 sm:p-6 rounded-xl text-white text-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 cursor-pointer"
+      className="group bg-white border border-blue-100 py-4 px-6 sm:p-8 rounded-2xl text-center shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 cursor-pointer"
     >
-      <div className="text-xl sm:text-3xl font-bold mb-2 transition-transform duration-300 group-hover:scale-110">
+      <div className="text-2xl sm:text-2xl font-bold text-blue-600 mb-1.5 transition-all duration-300 group-hover:text-blue-700">
         {count}
         {suffix}
       </div>
-      <div className="text-sm opacity-90 transition-opacity duration-300 group-hover:opacity-100">
-        {label}
-      </div>
+      <div className="text-sm  text-gray-600 font-bold">{label}</div>
     </div>
   );
 };
+
 export default function StatsOverView() {
   const stats = [
     { label: "Projects", value: 10, suffix: "+" },
@@ -86,7 +85,7 @@ export default function StatsOverView() {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-1 sm:gap-6">
+    <div className="hidden sm:grid grid-cols-1 sm:grid-cols-2  gap-3 sm:gap-5">
       {stats.map((stat, index) => (
         <AnimatedCounter
           key={index}

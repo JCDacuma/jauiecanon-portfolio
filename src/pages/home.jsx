@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import Hamburger from "hamburger-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import {
   Github,
   Linkedin,
@@ -12,6 +18,7 @@ import {
 
 import MainImage from "@/components/ui/image.jsx";
 import AboutMeSection from "@/components/layout/aboutMeSection.jsx";
+import SkillsSection from "@/components/layout/skillSection";
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -72,82 +79,83 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 ">
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="text-xl sm:text-2xl font-bold"
-            >
-              Jauie <span className="text-blue-600">Cañon</span>
-            </motion.div>
+    <div className="relative  bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 ">
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        <motion.nav
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center py-1 sm:py-4">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="text-xl sm:text-2xl font-bold"
+              >
+                Jauie <span className="text-blue-600">Cañon</span>
+              </motion.div>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              {["Home", "About", "Skills", "Works"].map((item) => (
-                <motion.button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`text-sm font-medium transition-colors ${
-                    activeSection === item.toLowerCase()
-                      ? "text-blue-600"
-                      : "text-gray-600 hover:text-blue-600"
-                  }`}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item}
-                </motion.button>
-              ))}
+              {/* Desktop Menu */}
+              <div className="hidden md:flex space-x-8">
+                {["Home", "About", "Skills", "Works"].map((item) => (
+                  <motion.button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className={`text-base font-medium transition-colors ${
+                      activeSection === item.toLowerCase()
+                        ? "text-blue-600"
+                        : "text-gray-600 hover:text-blue-600"
+                    }`}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {item}
+                  </motion.button>
+                ))}
+              </div>
+              <div className="relative md:hidden rounded-lg hover:bg-gray-100">
+                <Hamburger
+                  toggled={isMenuOpen}
+                  toggle={setIsMenuOpen}
+                  size={23}
+                />
+              </div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </motion.button>
+            {isMenuOpen && (
+              <motion.div
+                key="mobile-menu"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
+                className="md:hidden pb-4 overflow-hidden"
+              >
+                {["Home", "About", "Skills", "Works"].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className={`block w-full text-left py-2 px-4 rounded-lg ${
+                      activeSection === item.toLowerCase()
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </motion.div>
+            )}
           </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden pb-4"
-            >
-              {["Home", "About", "Skills", "Works"].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className={`block w-full text-left py-2 px-4 rounded-lg ${
-                    activeSection === item.toLowerCase()
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-50"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </div>
-      </motion.nav>
-
+        </motion.nav>
+      </AnimatePresence>
       {/* Main Section */}
       <section
         id="home"
-        className="min-h-screen flex items-center pt-20 px-4  sm:px-6 lg:px-8"
+        className="min-h-170 md:min-h-150 sm:min-h-200 h-screen  2xl:min-h-210 flex items-center pt-20  px-4   sm:px-6 lg:px-8"
       >
-        <div className="max-w-7xl mx-auto w-full">
+        <div className="max-w-7xl mx-auto  w-full">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <motion.div
               variants={containerVariants}
@@ -156,10 +164,10 @@ export default function Portfolio() {
               className="text-center md:text-left order-2 md:order-1"
             >
               <motion.div variants={itemVariants} className="mb-6">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-2">
+                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold mb-2">
                   Hi, I am <span className="text-blue-600">Jauie Cañon</span>
                 </h1>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
+                <h2 className="text-xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
                   Full Stack Web Developer
                 </h2>
               </motion.div>
@@ -269,30 +277,10 @@ export default function Portfolio() {
 
       {/* About Section */}
       <AboutMeSection />
-      {/* Skills Section Placeholder */}
-      <section
-        id="skills"
-        className="min-h-screen flex items-center py-20 px-4 sm:px-6 lg:px-8"
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8">
-              My <span className="text-blue-600">Skills</span>
-            </h2>
-            <p className="text-gray-600 text-lg">
-              Skills section coming soon...
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      {/* Skills Section */}
+      <SkillsSection />
 
-      {/* Works Section Placeholder */}
+      {/* Works Section */}
       <section
         id="works"
         className="min-h-screen flex items-center py-20 px-4 sm:px-6 lg:px-8 bg-white/50"
