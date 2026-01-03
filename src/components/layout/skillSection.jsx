@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import LogoLoop from "@/components/utils/logoLoops.jsx";
 
 export default function SkillsSection() {
   const skillCategories = [
@@ -120,6 +121,29 @@ export default function SkillsSection() {
     },
   ];
 
+  const skillsLogos = [
+    {
+      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
+      alt: "React",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+      alt: "Tailwind CSS",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg",
+      alt: "Laravel",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
+      alt: "Docker",
+    },
+    {
+      src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+      alt: "MySQL",
+    },
+  ];
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -157,7 +181,8 @@ export default function SkillsSection() {
   return (
     <section
       id="skills"
-      className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white "
+      className="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white "
+      viewport={{ once: true, margin: "-50px" }}
     >
       <div className="max-w-6xl mx-auto w-full">
         <motion.div
@@ -165,7 +190,7 @@ export default function SkillsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <motion.h2
             initial={{ opacity: 0, scale: 0.9 }}
@@ -181,18 +206,30 @@ export default function SkillsSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto"
+            className="text-gray-600 text-base mb-10 sm:text-lg max-w-2xl mx-auto"
           >
             Technologies I use to build modern web applications
           </motion.p>
+          <div className=" h-auto relative w-full from-gray-50 to-white   overflow-auto fade-x">
+            <LogoLoop
+              logos={skillsLogos}
+              speed={100}
+              direction="left"
+              logoHeight={40}
+              gap={45}
+              hoverSpeed={0}
+              scaleOnHover
+              fadeOut
+              fadeOutColor="#ffffff"
+              ariaLabel="Technology partners"
+            />
+          </div>
         </motion.div>
 
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="space-y-8"
         >
           {skillCategories.map((category, categoryIndex) => (
             <motion.div
