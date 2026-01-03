@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import MainImage from "@/components/ui/image.jsx";
+import AboutMeSection from "@/components/layout/aboutMeSection.jsx";
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -71,7 +72,7 @@ export default function Portfolio() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 ">
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -144,7 +145,7 @@ export default function Portfolio() {
       {/* Main Section */}
       <section
         id="home"
-        className="min-h-screen flex items-center pt-20 px-4 sm:px-6 lg:px-8"
+        className="min-h-screen flex items-center pt-20 px-4  sm:px-6 lg:px-8"
       >
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -182,7 +183,7 @@ export default function Portfolio() {
                     boxShadow: "0 10px 30px rgba(37, 99, 235, 0.3)",
                   }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium flex items-center gap-2 shadow-lg"
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium flex cursor-pointer items-center gap-2 shadow-lg"
                 >
                   <Download size={18} />
                   Resume
@@ -193,10 +194,10 @@ export default function Portfolio() {
                     boxShadow: "0 10px 30px rgba(37, 99, 235, 0.2)",
                   }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-white text-blue-600 border-2 border-blue-600 rounded-lg font-medium flex items-center gap-2"
+                  className="px-6 py-3 bg-white text-blue-600 border-2 border-blue-600 cursor-pointer rounded-lg font-medium flex items-center gap-2"
                 >
                   <Briefcase size={18} />
-                  Work
+                  Project
                 </motion.button>
               </motion.div>
 
@@ -205,8 +206,8 @@ export default function Portfolio() {
                 className="flex gap-6 justify-center md:justify-start"
               >
                 {[
-                  { icon: Github, href: "#" },
-                  { icon: Linkedin, href: "#" },
+                  { icon: Github, href: "https://github.com/JCDacuma" },
+                  { icon: Linkedin, href: "www.linkedin.com/in/jauie-cañon" },
                   { icon: Mail, href: "#" },
                 ].map((social, index) => (
                   <motion.a
@@ -214,7 +215,7 @@ export default function Portfolio() {
                     href={social.href}
                     whileHover={{ scale: 1.2, y: -5 }}
                     whileTap={{ scale: 0.9 }}
-                    className="p-3 bg-white rounded-full shadow-md hover:shadow-xl transition-shadow"
+                    className="p-3 bg-white rounded-full shadow-md cursor-pointer hover:shadow-xl transition-shadow"
                   >
                     <social.icon size={24} className="text-gray-700" />
                   </motion.a>
@@ -223,17 +224,18 @@ export default function Portfolio() {
             </motion.div>
 
             <motion.div
-              style={{ opacity, scale }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 50, scale: 0.8 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="flex justify-center order-1 md:order-2"
+              className="flex justify-center"
             >
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 className="relative"
               >
+                {/* ---- Image UI ---- */}
                 <MainImage />
                 <motion.div
                   animate={{
@@ -266,100 +268,7 @@ export default function Portfolio() {
       </section>
 
       {/* About Section */}
-      <section
-        id="about"
-        className="min-h-screen flex items-center py-20 px-4 sm:px-6 lg:px-8 bg-white/50"
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold">
-              About <span className="text-blue-600">Me</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex justify-center"
-            >
-              <motion.div
-                whileHover={{ scale: 1.03 }}
-                className="relative w-full max-w-md"
-              >
-                <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="w-full h-full bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-500 flex items-center justify-center text-white text-6xl font-bold">
-                    JC
-                  </div>
-                </div>
-                <motion.div
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="absolute -top-6 -right-6 w-24 h-24 bg-yellow-400 rounded-full opacity-30 blur-2xl"
-                />
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-6"
-            >
-              <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
-                <h3 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800">
-                  Professional Journey
-                </h3>
-                <p className="text-gray-600 leading-relaxed mb-4">
-                  As a passionate Full Stack Web Developer, I specialize in
-                  creating modern, responsive, and user-friendly web
-                  applications. With a strong foundation in both front-end and
-                  back-end technologies, I bring ideas to life through clean
-                  code and innovative solutions.
-                </p>
-                <p className="text-gray-600 leading-relaxed">
-                  My journey in technology is driven by curiosity and a
-                  commitment to continuous learning. I thrive on challenges and
-                  enjoy collaborating with teams to build impactful digital
-                  experiences.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { label: "Projects", value: "50+" },
-                  { label: "Experience", value: "3+ Years" },
-                  { label: "Technologies", value: "15+" },
-                  { label: "Clients", value: "30+" },
-                ].map((stat, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="bg-gradient-to-br from-blue-500 to-indigo-600 p-4 sm:p-6 rounded-xl text-white text-center shadow-lg"
-                  >
-                    <div className="text-2xl sm:text-3xl font-bold mb-1">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs sm:text-sm opacity-90">
-                      {stat.label}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
+      <AboutMeSection />
       {/* Skills Section Placeholder */}
       <section
         id="skills"

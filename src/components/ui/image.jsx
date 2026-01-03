@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 export default function MainImage() {
   return (
-    <div className="relative w-64 h-64 sm:w-80 mb-2 sm:h-80 lg:w-90 lg:h-90">
+    <div className="relative w-50 h-50 sm:w-80 mb-2 sm:h-80 lg:w-90 lg:h-90">
       <motion.div
         className="absolute inset-0 rounded-full bg-linear-to-br from-blue-400 via-blue-500 to-blue-600 opacity-50 blur-2xl"
         animate={{
@@ -9,13 +9,12 @@ export default function MainImage() {
           rotate: [0, 180, 360],
         }}
         transition={{
-          duration: 8,
+          duration: 4,
           repeat: Infinity,
           ease: "linear",
         }}
       />
 
-      {/* Secondary glow ring */}
       <motion.div
         className="absolute inset-0 rounded-full bg-linear-to-tr from-blue-100 via-blue-300 to-blue-400 opacity-40 blur-xl"
         animate={{
@@ -29,7 +28,6 @@ export default function MainImage() {
         }}
       />
 
-      {/* Orbiting particles */}
       {[...Array(3)].map((_, i) => (
         <motion.div
           key={i}
@@ -51,7 +49,6 @@ export default function MainImage() {
         />
       ))}
 
-      {/* Main image container */}
       <motion.div
         className="relative w-full h-full rounded-full overflow-hidden shadow-2xl ring-2 ring-white/10"
         initial={{ scale: 0.8, opacity: 0 }}
@@ -66,14 +63,12 @@ export default function MainImage() {
         }}
         whileTap={{ scale: 0.98 }}
       >
-        {/* Gradient border effect */}
         <motion.div
-          className="absolute inset-0 rounded-full bg-linear-to-br from-blue-400 via-purple-500 to-pink-500 opacity-0"
+          className="absolute inset-0 rounded-full bg-linear-to-br from-blue-400 via-blue-500 to-blue-500 opacity-0"
           whileHover={{ opacity: 0.3 }}
           transition={{ duration: 0.3 }}
         />
 
-        {/* Animated ring border */}
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{
@@ -90,11 +85,10 @@ export default function MainImage() {
           }}
         />
 
-        {/* Inner container for image */}
         <div className="absolute inset-1 rounded-full overflow-hidden bg-blue-700">
           <motion.img
             src="src/assets/aboutme/main_image.png"
-            alt="Profile - Graduate in academic regalia"
+            alt="Profile"
             className="w-full h-full object-cover object-center"
             loading="lazy"
             initial={{ scale: 1.2 }}
@@ -102,17 +96,9 @@ export default function MainImage() {
             transition={{ duration: 1.2, ease: "easeOut" }}
             whileHover={{ scale: 1.1 }}
           />
-
-          {/* Overlay gradient on hover */}
-          <motion.div
-            className="absolute inset-0 bg-linear-to-t from-blue-600/50 to-transparent opacity-0"
-            whileHover={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          />
         </div>
       </motion.div>
 
-      {/* Floating accent elements */}
       <motion.div
         className="absolute -top-4 -right-4 w-8 h-8 bg-linear-to-br from-blue-400 to-blue-600 rounded-full shadow-lg"
         animate={{
@@ -126,7 +112,7 @@ export default function MainImage() {
       />
 
       <motion.div
-        className="absolute -bottom-4 -left-4 w-6 h-6 bg-linear-to-br from-blue-400 to-purple-600 rounded-full shadow-lg"
+        className="absolute -bottom-4 -left-4 w-6 h-6 bg-linear-to-br from-blue-400 to-blue-600 rounded-full shadow-lg"
         animate={{
           y: [0, -15, 0],
         }}
