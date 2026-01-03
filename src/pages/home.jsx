@@ -88,7 +88,7 @@ export default function Portfolio() {
           className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center py-1 sm:py-4">
+            <div className="flex justify-between items-center py-4 sm:py-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 className="text-xl sm:text-2xl font-bold"
@@ -114,7 +114,7 @@ export default function Portfolio() {
                   </motion.button>
                 ))}
               </div>
-              <div className="relative md:hidden rounded-lg hover:bg-gray-100">
+              <div className="absolute right-2 md:hidden rounded-lg hover:bg-gray-100">
                 <Hamburger
                   toggled={isMenuOpen}
                   toggle={setIsMenuOpen}
@@ -294,7 +294,7 @@ export default function Portfolio() {
             className="text-center"
           >
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8">
-              My <span className="text-blue-600">Works</span>
+              Featured <span className="text-blue-600">Projects</span>
             </h2>
             <p className="text-gray-600 text-lg">
               Portfolio projects coming soon...

@@ -14,7 +14,7 @@ export default function SkillsSection() {
         {
           name: "TypeScript",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-          level: 65,
+          level: 55,
         },
         {
           name: "JavaScript",
@@ -24,17 +24,17 @@ export default function SkillsSection() {
         {
           name: "HTML5",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
-          level: 95,
+          level: 98,
         },
         {
           name: "CSS3",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
-          level: 90,
+          level: 70,
         },
         {
           name: "Redux",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg",
-          level: 80,
+          level: 50,
         },
         {
           name: "Chart.js",
@@ -44,7 +44,7 @@ export default function SkillsSection() {
         {
           name: "Tailwind CSS",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
-          level: 90,
+          level: 80,
         },
         {
           name: "Bootstrap",
@@ -69,7 +69,7 @@ export default function SkillsSection() {
         {
           name: "PHP",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg",
-          level: 85,
+          level: 80,
         },
         {
           name: "REST API",
@@ -84,7 +84,12 @@ export default function SkillsSection() {
         {
           name: "Laravel Sanctum",
           logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg",
-          level: 85,
+          level: 90,
+        },
+        {
+          name: "MySQL",
+          logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
+          level: 65,
         },
       ],
     },
@@ -152,7 +157,7 @@ export default function SkillsSection() {
   return (
     <section
       id="skills"
-      className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white py-20"
+      className="min-h-screen flex items-center px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white "
     >
       <div className="max-w-6xl mx-auto w-full">
         <motion.div
@@ -206,7 +211,7 @@ export default function SkillsSection() {
                 {category.title}
               </motion.h3>
               <motion.div
-                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                className="grid grid-cols-2 sm:grid-cols-3 gap-6"
                 variants={{
                   visible: {
                     transition: {
@@ -224,7 +229,7 @@ export default function SkillsSection() {
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <motion.div
-                        className="w-10 h-10 flex-shrink-0 bg-blue-50 rounded-lg p-1.5 group-hover:bg-blue-100 transition-colors duration-300"
+                        className="w-10 h-10 shrink-0 bg-blue-50 rounded-lg p-1.5 group-hover:bg-blue-100 transition-colors duration-300"
                         whileHover={{ rotate: 5 }}
                         transition={{ duration: 0.3 }}
                       >
@@ -240,8 +245,8 @@ export default function SkillsSection() {
                         />
                       </motion.div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 truncate">
+                        <div className="flex flex-col sm:flex-row items-start justify-between mb-2">
+                          <span className="text-xs sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 truncate">
                             {skill.name}
                           </span>
                           <motion.span
@@ -269,7 +274,7 @@ export default function SkillsSection() {
                               delay: 0.2 + skillIndex * 0.1,
                               ease: [0.4, 0, 0.2, 1],
                             }}
-                            className="h-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 rounded-full relative overflow-hidden"
+                            className="h-full bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 rounded-full relative overflow-hidden"
                           >
                             <motion.div
                               animate={{
@@ -280,7 +285,7 @@ export default function SkillsSection() {
                                 repeat: Infinity,
                                 ease: "linear",
                               }}
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                              className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
                             />
                           </motion.div>
                         </div>

@@ -79,9 +79,7 @@ const AnimatedCounter = ({ end, duration = 2000, suffix = "", label }) => {
 export default function StatsOverView() {
   const stats = [
     { label: "Projects", value: 10, suffix: "+" },
-    { label: "Hands-on Experience", value: 1, suffix: " Year" },
     { label: "Technologies", value: 20, suffix: "+" },
-    { label: "Certifications", value: 2, suffix: "" },
   ];
 
   return (
