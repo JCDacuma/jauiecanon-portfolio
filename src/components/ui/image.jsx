@@ -87,7 +87,7 @@ export default function MainImage() {
 
         <div className="absolute inset-1 rounded-full overflow-hidden bg-blue-700">
           <motion.img
-            src="public/aboutme/main_image.png"
+            src="/aboutme/main_image.png"
             alt="Profile"
             className="w-full h-full object-cover object-center"
             loading="lazy"
