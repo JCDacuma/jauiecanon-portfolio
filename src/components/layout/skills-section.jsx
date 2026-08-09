@@ -197,20 +197,16 @@ export default function SkillsSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4"
+            className="text-3xl  lg:text-3xl font-bold mb-4"
           >
-            My <span className="text-blue-600 bg-clip-text">Skills</span>
+            <p>
+              Skills That{" "}
+              <span className="text-emerald-600 bg-clip-text"> fuel </span>my
+              <span className="text-emerald-600 bg-clip-text"> passion</span>
+            </p>
           </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-gray-600 text-base mb-10 sm:text-lg max-w-2xl mx-auto"
-          >
-            Technologies I use to build modern web applications
-          </motion.p>
-          <div className=" h-auto relative w-full from-gray-50 to-white   overflow-auto fade-x">
+
+          <div className=" h-auto relative w-full from-gray-50 to-white  mt-10 overflow-auto fade-x">
             <LogoLoop
               logos={skillsLogos}
               speed={100}
