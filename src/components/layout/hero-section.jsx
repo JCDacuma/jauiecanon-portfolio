@@ -58,7 +58,7 @@ export default function HeroSection() {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-[calc(100vh-2rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900"
+      className="relative w-full h-[calc(100vh-2.3rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900"
     >
       {/* 1. PARTICLES BACKGROUND LAYER */}
       <ParticlesBackground />
