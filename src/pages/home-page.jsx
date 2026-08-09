@@ -17,9 +17,16 @@ export default function HomePage() {
   const [activeSection, setActiveSection] = useState("home");
 
   const { setIsMenuOpen } = useNavbar();
-
+  useEffect(() => {
+    // Check if particlesJS was loaded from index.html
+    if (window.particlesJS) {
+      window.particlesJS.load("particles-js", "/particles.json", function () {
+        console.log("particles.js config loaded!");
+      });
+    }
+  }, []);
   return (
-    <div className="relative  bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 ">
+    <div className="relative  bg-linear-to-b from-gray-50 to-white  ">
       {/* Mobile Menu */}
 
       {/* Main Section */}

@@ -154,59 +154,40 @@ export default function SkillsSection() {
     },
   };
 
-  const categoryVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
   return (
     <section
       id="skills"
-      className="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white "
+      className="relative min-h-screen flex flex-col items-center mt-10 pt-10  overflow-hidden bg-stone-700"
       viewport={{ once: true, margin: "-50px" }}
     >
-      <div className="max-w-6xl mx-auto w-full">
+      {/* Background layers */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] bg-[size:32px_32px]" />
+        <div className="absolute -top-32 -left-32 w-[28rem] h-[28rem] bg-emerald-500/30 rounded-full blur-[120px]" />
+        <div className="absolute top-1/3 -right-32 w-[26rem] h-[26rem] bg-teal-400/20 rounded-full blur-[130px]" />
+        <div className="absolute bottom-0 left-1/4 w-[24rem] h-[24rem] bg-emerald-700/30 rounded-full blur-[110px]" />
+        <div className="absolute inset-0 backdrop-blur-3xl bg-emerald-900/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-emerald-950/60" />
+      </div>
+
+      <div className="w-full mx-auto w-full ">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12 pt-5 sm:mb-16"
         >
-          <motion.h2
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-3xl  lg:text-3xl font-bold mb-4"
-          >
-            <p>
-              Skills That{" "}
-              <span className="text-emerald-600 bg-clip-text"> fuel </span>my
-              <span className="text-emerald-600 bg-clip-text"> passion</span>
-            </p>
-          </motion.h2>
+          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-400 uppercase mb-2">
+            What I bring to the table
+          </span>
+          <h2 className="text-3xl  font-bold text-white">
+            Skills That <span className="text-emerald-400">Fuel</span> My
+            Passion
+          </h2>
+          <div className="mt-4 mx-auto w-16 h-1 rounded-full bg-emerald-400" />
 
-          <div className=" h-auto relative w-full from-gray-50 to-white  mt-10 overflow-auto fade-x">
+          <div className="relative mt-10 py-3 bg-stone-700 overflow-auto fade-x">
             <LogoLoop
               logos={skillsLogos}
               speed={100}
@@ -215,121 +196,15 @@ export default function SkillsSection() {
               gap={45}
               hoverSpeed={0}
               scaleOnHover
-              fadeOut
-              fadeOutColor="#ffffff"
               ariaLabel="Technology partners"
             />
           </div>
         </motion.div>
-
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-        >
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div
-              key={categoryIndex}
-              variants={categoryVariants}
-              whileHover={{ y: -2 }}
-              className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-lg border border-gray-100 transition-all duration-300"
-            >
-              <motion.h3
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="text-lg sm:text-xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-blue-100"
-              >
-                {category.title}
-              </motion.h3>
-              <motion.div
-                className="grid grid-cols-2 sm:grid-cols-3 gap-6"
-                variants={{
-                  visible: {
-                    transition: {
-                      staggerChildren: 0.1,
-                    },
-                  },
-                }}
-              >
-                {category.skills.map((skill, skillIndex) => (
-                  <motion.div
-                    key={skillIndex}
-                    variants={itemVariants}
-                    whileHover={{ scale: 1.02, x: 4 }}
-                    className="group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <motion.div
-                        className="w-10 h-10 shrink-0 bg-blue-50 rounded-lg p-1.5 group-hover:bg-blue-100 transition-colors duration-300"
-                        whileHover={{ rotate: 5 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <img
-                          src={skill.logo}
-                          alt={skill.name}
-                          className="w-full h-full object-contain"
-                          onError={(e) => {
-                            e.target.src =
-                              "https://via.placeholder.com/40/3B82F6/FFFFFF?text=" +
-                              skill.name.charAt(0);
-                          }}
-                        />
-                      </motion.div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-col sm:flex-row items-start justify-between mb-2">
-                          <span className="text-xs sm:text-base font-semibold text-gray-800 group-hover:text-blue-600 transition-colors duration-300 truncate">
-                            {skill.name}
-                          </span>
-                          <motion.span
-                            initial={{ opacity: 0, scale: 0 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 0.5,
-                              delay: 0.3 + skillIndex * 0.1,
-                              type: "spring",
-                              stiffness: 200,
-                            }}
-                            className="text-sm sm:text-base font-bold text-blue-600 ml-2"
-                          >
-                            {skill.level}%
-                          </motion.span>
-                        </div>
-                        <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden shadow-inner">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${skill.level}%` }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 1.2,
-                              delay: 0.2 + skillIndex * 0.1,
-                              ease: [0.4, 0, 0.2, 1],
-                            }}
-                            className="h-full bg-linear-to-r from-blue-500 via-blue-600 to-blue-700 rounded-full relative overflow-hidden"
-                          >
-                            <motion.div
-                              animate={{
-                                x: ["-100%", "100%"],
-                              }}
-                              transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: "linear",
-                              }}
-                              className="absolute inset-0 bg-linear-to-r from-transparent via-white/30 to-transparent"
-                            />
-                          </motion.div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-          ))}
-        </motion.div>
+        ></motion.div>
       </div>
     </section>
   );

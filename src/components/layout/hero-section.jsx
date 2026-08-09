@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail, Download } from "lucide-react";
+import ParticlesBackground from "@/components/ui/particlesBackground";
 
 const accountLinks = [
   { name: "Github", url: "https://github.com/jauiecanon", icon: Github },
@@ -10,7 +11,7 @@ const accountLinks = [
     url: "https://linkedin.com/in/jauiecanon",
     icon: Linkedin,
   },
-  { name: "Mail", url: "mailto:[EMAIL_ADDRESS]", icon: Mail },
+  { name: "Mail", url: "mailto:your-email@example.com", icon: Mail },
 ];
 
 export default function HeroSection() {
@@ -62,15 +63,19 @@ export default function HeroSection() {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-screen overflow-hidden text-white font-sans bg-stone-500"
+      className="relative w-full h-screen overflow-hidden text-white font-sans bg-stone-900"
     >
-      <div className="absolute inset-0 pt-14 lg:pt-0 flex justify-center items-end">
+      {/* 1. PARTICLES BACKGROUND LAYER */}
+      <ParticlesBackground />
+
+      {/* 2. IMAGE LAYER */}
+      <div className="absolute inset-0 pt-14 lg:pt-0 flex justify-center items-end pointer-events-none">
         <div className="relative w-full h-full flex justify-center lg:justify-center items-end lg:absolute lg:right-0 lg:bottom-0 lg:w-[55%] lg:h-[80%]">
           <img
             src="/aboutme/barongtagalog_myimage_transparent.png"
             alt="Hero"
             className={`
-              h-full w-auto max-w-none object-contain object-bottom mx-auto lg:mx-0
+              h-full w-auto max-w-none object-contain object-bottom mx-s lg:mx-0
               ${transitionClass}
               ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 lg:translate-x-40"}
             `}
@@ -78,13 +83,14 @@ export default function HeroSection() {
         </div>
       </div>
 
+      {/* 3. CONTENT & OVERLAY LAYER */}
       <div
         className={`
           absolute inset-x-0 bottom-0 lg:inset-0
           z-10 flex items-end lg:items-center justify-start
           p-6 pb-8 lg:p-12
           bg-gradient-to-t from-black/90 via-emerald-950/70 to-transparent
-          lg:bg-none lg:bg-emerald-800
+          lg:bg-emerald-900/90
           lg:[clip-path:polygon(0_0,58%_0,42%_100%,0_100%)]
           ${transitionClass}
           ${isVisible ? "opacity-100 translate-y-0 lg:translate-x-0" : "opacity-0 translate-y-8 lg:translate-y-0 lg:-translate-x-24"}
@@ -102,12 +108,13 @@ export default function HeroSection() {
                 href={accountLink.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="hover:text-cyan-400 transition-colors"
               >
                 <accountLink.icon />
               </a>
-            ))}{" "}
-            |{" "}
-            <button className="flex text-sm items-center gap-2 border border-solid border-white rounded-full px-3 py-1">
+            ))}
+            <span>|</span>
+            <button className="flex text-sm items-center gap-2 border border-solid border-white rounded-full px-3 py-1 hover:bg-white/10 transition-colors">
               <Download size={14} />
               Resume
             </button>

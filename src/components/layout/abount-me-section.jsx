@@ -17,7 +17,7 @@ export default function AboutMeSection() {
   return (
     <section
       id="about"
-      className="min-h-screen flex items-center py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-stone-50 overflow-hidden"
+      className="min-h-screen flex items-center py-16 mb-10 sm:py-24 px-4 sm:px-6 lg:px-8 bg-stone-50 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
@@ -27,11 +27,11 @@ export default function AboutMeSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-12 sm:mb-16"
         >
-          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-600 uppercase mb-2">
+          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-800 uppercase mb-2">
             Get to know me
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-stone-800">
-            About <span className="text-emerald-600">Me</span>
+          <h2 className="text-3xl sm:text-4xl  font-bold text-stone-700">
+            About <span className="text-emerald-800">Me</span>
           </h2>
           <div className="mt-4 mx-auto w-16 h-1 rounded-full bg-emerald-600" />
         </motion.div>
@@ -82,10 +82,10 @@ export default function AboutMeSection() {
 
           {/* Text content - replays every time it enters view */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 25 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
             className="space-y-6 text-center md:text-left order-2"
           >
             <div className="space-y-4">
