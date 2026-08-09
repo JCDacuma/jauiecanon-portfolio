@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail, Download } from "lucide-react";
 import ParticlesBackground from "@/components/ui/particlesBackground";
@@ -25,14 +24,12 @@ export default function HeroSection() {
       setSkipTransition(false);
       setIsVisible(true);
     }, 100);
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           if (hasLeftRef.current) {
             setSkipTransition(true);
             setIsVisible(false);
-
             requestAnimationFrame(() => {
               requestAnimationFrame(() => {
                 setSkipTransition(false);
@@ -47,9 +44,7 @@ export default function HeroSection() {
       },
       { threshold: 0, rootMargin: "-10% 0px -10% 0px" },
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
-
     return () => {
       clearTimeout(initialTimer);
       observer.disconnect();
@@ -67,7 +62,6 @@ export default function HeroSection() {
     >
       {/* 1. PARTICLES BACKGROUND LAYER */}
       <ParticlesBackground />
-
       {/* 2. IMAGE LAYER */}
       <div className="absolute inset-0 pt-14 lg:pt-0 flex justify-center items-end pointer-events-none">
         <div className="relative w-full h-full flex justify-center lg:justify-center items-end lg:absolute lg:right-0 lg:bottom-0 lg:w-[55%] lg:h-[80%]">
@@ -75,14 +69,13 @@ export default function HeroSection() {
             src="/aboutme/barongtagalog_myimage_transparent.png"
             alt="Hero"
             className={`
-              h-full w-auto max-w-none object-contain object-bottom mx-s lg:mx-0
+              h-[85%] sm:h-[90%] lg:h-full w-auto max-w-none object-contain object-bottom mx-s lg:mx-0
               ${transitionClass}
               ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 lg:translate-x-40"}
             `}
           />
         </div>
       </div>
-
       {/* 3. CONTENT & OVERLAY LAYER */}
       <div
         className={`
@@ -97,7 +90,9 @@ export default function HeroSection() {
         `}
       >
         <div className="max-w-xs lg:max-w-sm lg:ml-5">
-          <h1 className="text-3xl font-bold mb-2">Hi, I'm Jauie Cañon</h1>
+          <h1 className="text-xl sm:text-3xl xl:text-4xl font-bold mb-2">
+            Hi, I'm Jauie Cañon
+          </h1>
           <p className="text-indigo-100 text-sm mb-1.5">
             I'm a full stack web developer based in the Philippines.
           </p>

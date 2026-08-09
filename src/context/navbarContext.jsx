@@ -69,7 +69,7 @@ export default function NavbarProvider({ children }) {
               <img
                 src="/logo/logo.svg"
                 alt="Logo"
-                className="w-12 h-12 sm:w-16 sm:h-16 object-contain drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
+                className="w-12 h-12  object-contain drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
               />
             </div>
 
