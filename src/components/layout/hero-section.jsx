@@ -58,18 +58,18 @@ export default function HeroSection() {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-screen overflow-hidden text-white font-sans bg-stone-900"
+      className="relative w-full h-[calc(100vh-2rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900"
     >
       {/* 1. PARTICLES BACKGROUND LAYER */}
       <ParticlesBackground />
       {/* 2. IMAGE LAYER */}
-      <div className="absolute inset-0 pt-14 lg:pt-0 flex justify-center items-end pointer-events-none">
+      <div className="absolute inset-0 pt-5 lg:pt-0 flex justify-center items-end pointer-events-none">
         <div className="relative w-full h-full flex justify-center lg:justify-center items-end lg:absolute lg:right-0 lg:bottom-0 lg:w-[55%] lg:h-[80%]">
           <img
             src="/aboutme/barongtagalog_myimage_transparent.png"
             alt="Hero"
             className={`
-              h-[85%] sm:h-[90%] lg:h-full w-auto max-w-none object-contain object-bottom mx-s lg:mx-0
+              h-[86%] sm:h-[90%] lg:h-full w-auto max-w-none object-contain object-bottom mx-s lg:mx-0
               ${transitionClass}
               ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 lg:translate-x-40"}
             `}
@@ -89,11 +89,11 @@ export default function HeroSection() {
           ${isVisible ? "opacity-100 translate-y-0 lg:translate-x-0" : "opacity-0 translate-y-8 lg:translate-y-0 lg:-translate-x-24"}
         `}
       >
-        <div className="max-w-xs lg:max-w-sm lg:ml-5">
-          <h1 className="text-xl sm:text-3xl xl:text-4xl font-bold mb-2">
+        <div className="max-w-xs lg:max-w-sm 2xl:max-w-lg lg:ml-5 2xl:ml-15">
+          <h1 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-bold mb-2">
             Hi, I'm Jauie Cañon
           </h1>
-          <p className="text-indigo-100 text-sm mb-1.5">
+          <p className="text-indigo-100 text-sm 2xl:text-base mb-1.5">
             I'm a full stack web developer based in the Philippines.
           </p>
           <div className="flex gap-4 mt-4.5 items-center">
