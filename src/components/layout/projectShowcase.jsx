@@ -1,0 +1,166 @@
+"use client";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Github } from "lucide-react";
+
+const defaultProjects = [
+  {
+    image: "/projects/project-1.jpg",
+    title: "Project One",
+    description:
+      "A short, clear line about what this project does and the problem it solves.",
+    tags: ["Next.js", "TypeScript", "Tailwind"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    image: "/projects/project-2.jpg",
+    title: "Project Two",
+    description:
+      "A short, clear line about what this project does and the problem it solves.",
+    tags: ["React", "Node.js", "PostgreSQL"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    image: "/projects/project-3.jpg",
+    title: "Project Three",
+    description:
+      "A short, clear line about what this project does and the problem it solves.",
+    tags: ["Next.js", "Prisma", "Stripe"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+  {
+    image: "/projects/project-4.jpg",
+    title: "Project Four",
+    description:
+      "A short, clear line about what this project does and the problem it solves.",
+    tags: ["React Native", "Expo"],
+    liveUrl: "#",
+    githubUrl: "#",
+  },
+];
+
+// Tracks whether an element is in view, without disconnecting, so
+// animations can replay every time it scrolls back into the viewport.
+function useInView(threshold = 0.2) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
+
+function ProjectCard({ project, index }) {
+  const { image, title, description, tags, liveUrl, githubUrl } = project;
+  const [ref, inView] = useInView(0.15);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: inView ? `${(index % 4) * 100}ms` : "0ms" }}
+      className={`
+        group relative flex flex-col overflow-hidden rounded-2xl
+        border border-stone-200 bg-white
+        transition-[opacity,transform,border-color,box-shadow] duration-700 ease-out will-change-transform
+        hover:border-emerald-700/50 hover:shadow-lg hover:shadow-stone-200/60
+        ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
+      `}
+    >
+      {/* Image */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-stone-100">
+        <img
+          src={image}
+          alt={title}
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-base sm:text-lg font-semibold text-stone-900 tracking-tight">
+            {title}
+          </h3>
+          <a
+            href={liveUrl}
+            aria-label={`Open ${title}`}
+            className="shrink-0 rounded-full border border-stone-200 p-2 text-stone-500 transition-colors duration-300 hover:border-emerald-700 hover:text-emerald-700"
+          >
+            <ArrowUpRight size={15} strokeWidth={1.75} />
+          </a>
+        </div>
+
+        <p className="text-sm text-stone-500 leading-relaxed">{description}</p>
+
+        <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-stone-200 bg-stone-50 px-2.5 py-1 text-xs text-stone-600"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {githubUrl && (
+          <a
+            href={githubUrl}
+            className="mt-1 inline-flex w-fit items-center gap-1.5 text-sm text-stone-500 transition-colors duration-300 hover:text-emerald-700"
+          >
+            <Github size={15} strokeWidth={1.75} />
+            View code
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function ProjectShowcase({ projects = defaultProjects }) {
+  const [introRef, introInView] = useInView(0.3);
+
+  return (
+    <section
+      id="projects"
+      className="relative flex flex-col items-center pt-15 pb-24 overflow-hidden bg-stone-50"
+    >
+      <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
+        <div
+          ref={introRef}
+          className={`
+            flex flex-col items-center text-center
+            transition-[opacity,transform] duration-700 ease-out will-change-transform
+            ${introInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
+          `}
+        >
+          <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-emerald-900">
+            What I&apos;ve built
+          </span>
+          <h2 className="mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-stone-900">
+            Projects
+          </h2>
+          <p className="mt-4 max-w-md text-sm sm:text-base text-stone-500 leading-relaxed">
+            A selection of things I&apos;ve designed and built, from full
+            products to small experiments.
+          </p>
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+          {projects.map((project, index) => (
+            <ProjectCard key={project.title} project={project} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

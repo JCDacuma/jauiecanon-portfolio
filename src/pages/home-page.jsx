@@ -12,6 +12,9 @@ import { useNavbar } from "@/context/navbarContext.jsx";
 import AboutMeSection from "@/components/layout/abount-me-section.jsx";
 import SkillsSection from "@/components/layout/skills-section";
 import HeroSection from "@/components/layout/hero-section.jsx";
+import ServicesSection from "@/components/layout/services-section.jsx";
+import GitHubContributions from "@/components/layout/github-section.jsx";
+import ProjectShowcase from "@/components/layout/projectShowcase.jsx";
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState("home");
@@ -34,31 +37,18 @@ export default function HomePage() {
 
       {/* About Section */}
       <AboutMeSection />
+
+      {/* Services Section */}
+      <ServicesSection />
+
       {/* Skills Section */}
       <SkillsSection />
 
+      {/* GitHub Contributions Section */}
+      <GitHubContributions username={"JcDacuma"} />
+
       {/* Works Section */}
-      <section
-        id="works"
-        className="min-h-screen flex items-center py-20 px-4 sm:px-6 lg:px-8 bg-white/50"
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-8">
-              Featured <span className="text-blue-600">Projects</span>
-            </h2>
-            <p className="text-gray-600 text-lg">
-              Portfolio projects coming soon...
-            </p>
-          </motion.div>
-        </div>
-      </section>
+      <ProjectShowcase />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-4">

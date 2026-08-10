@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail, Download } from "lucide-react";
 import ParticlesBackground from "@/components/ui/particlesBackground";
-
+import TextAnimateShowing from "@/components/ui/textAnimateShowing.jsx";
 const accountLinks = [
   { name: "Github", url: "https://github.com/jauiecanon", icon: Github },
   {
@@ -12,13 +12,11 @@ const accountLinks = [
   },
   { name: "Mail", url: "mailto:your-email@example.com", icon: Mail },
 ];
-
 export default function HeroSection() {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [skipTransition, setSkipTransition] = useState(true);
   const hasLeftRef = useRef(false);
-
   useEffect(() => {
     const initialTimer = setTimeout(() => {
       setSkipTransition(false);
@@ -50,21 +48,17 @@ export default function HeroSection() {
       observer.disconnect();
     };
   }, []);
-
   const transitionClass = skipTransition
     ? ""
     : "transition-all duration-1000 ease-out";
-
   return (
     <div
       ref={sectionRef}
       className="relative w-full h-[calc(100vh-2.3rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900"
     >
-      {/* 1. PARTICLES BACKGROUND LAYER */}
       <ParticlesBackground />
-      {/* 2. IMAGE LAYER */}
       <div className="absolute inset-0 pt-5 lg:pt-0 flex justify-center items-end pointer-events-none">
-        <div className="relative w-full h-full flex justify-center lg:justify-center items-end lg:absolute lg:right-0 lg:bottom-0 lg:w-[55%] lg:h-[80%]">
+        <div className="relative w-full h-full flex justify-center lg:justify-center items-end lg:absolute lg:right-0 lg:bottom-0 lg:w-[55%] lg:h-[90%]">
           <img
             src="/aboutme/barongtagalog_myimage_transparent.png"
             alt="Hero"
@@ -76,7 +70,6 @@ export default function HeroSection() {
           />
         </div>
       </div>
-      {/* 3. CONTENT & OVERLAY LAYER */}
       <div
         className={`
           absolute inset-x-0 bottom-0 lg:inset-0
@@ -93,8 +86,24 @@ export default function HeroSection() {
           <h1 className="text-xl sm:text-3xl xl:text-4xl 2xl:text-5xl font-bold mb-2">
             Hi, I'm Jauie Cañon
           </h1>
-          <p className="text-indigo-100 text-sm 2xl:text-base mb-1.5">
-            I'm a full stack web developer based in the Philippines.
+
+          <p className="text-indigo-100 text-sm 2xl:text-base mb-1.5 min-h-[1.5em]">
+            <TextAnimateShowing
+              speed={85}
+              className="text-indigo-100"
+              text={[
+                "I'm a full stack web developer based in the Philippines.",
+                2500,
+                "I build fast, accessible interfaces.",
+                2500,
+                "I turn ideas into real, working products.",
+                2500,
+                "Clean code, thoughtful UX, real impact.",
+                2500,
+                "Always learning. Always building.",
+                2500,
+              ]}
+            />
           </p>
           <div className="flex gap-4 mt-4.5 items-center">
             {accountLinks.map((accountLink) => (

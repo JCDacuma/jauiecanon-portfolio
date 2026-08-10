@@ -17,7 +17,7 @@ export default function AboutMeSection() {
   return (
     <section
       id="about"
-      className="min-h-screen flex items-center py-16 mb-10 sm:py-24 px-4 sm:px-6 lg:px-8 bg-stone-50 overflow-hidden"
+      className="min-h-screen flex items-center xl:pb-10 pt-20 px-4 sm:px-6 lg:px-8 bg-stone-50 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto w-full">
         <motion.div
@@ -30,7 +30,7 @@ export default function AboutMeSection() {
           <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-800 uppercase mb-2">
             Get to know me
           </span>
-          <h2 className="text-3xl sm:text-4xl  font-bold text-stone-700">
+          <h2 className="text-3xl sm:text-4xl  font-bold text-stone-900">
             About <span className="text-emerald-800">Me</span>
           </h2>
           <div className="mt-4 mx-auto w-16 h-1 rounded-full bg-emerald-600" />
@@ -44,7 +44,7 @@ export default function AboutMeSection() {
             transition={{ duration: 0.7, ease: "easeOut" }}
             className="flex justify-center order-1"
           >
-            <div className="relative w-full max-w-[280px] sm:max-w-sm md:max-w-md">
+            <div className="relative w-full sm:max-w-[280px] max-w-[240px] sm:max-w-sm md:max-w-md">
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.4 }}
