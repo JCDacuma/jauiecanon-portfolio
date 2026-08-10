@@ -4,29 +4,29 @@ import { ArrowUpRight, Github } from "lucide-react";
 
 const defaultProjects = [
   {
-    image: "/projects/project-1.jpg",
-    title: "Project One",
+    image: "/projects/inventory_pos_img/inv_pos_img.svg",
+    title: "Point of Sale with Inventory Management System",
     description:
-      "A short, clear line about what this project does and the problem it solves.",
-    tags: ["Next.js", "TypeScript", "Tailwind"],
+      "Streamlines retail operations by combining sales processing, real-time stock tracking, and actionable analytics into a single, seamless platform.",
+    tags: ["React", "TypeScript", "Tailwind", "Laravel", "MySQL", "Redis"],
+    liveUrl: "#",
+    githubUrl: "",
+  },
+  {
+    image: "/projects/logistics_img/main_logistics.svg",
+    title: "Logistics with Driver Dispatch System",
+    description:
+      "Streamlines logistics operations by combining order management, driver dispatch, and real-time tracking into a single, seamless platform.",
+    tags: ["React", "TypeScript", "Tailwind", "Laravel", "MySQL", "Redis"],
     liveUrl: "#",
     githubUrl: "#",
   },
   {
-    image: "/projects/project-2.jpg",
-    title: "Project Two",
+    image: "/projects/pmms_img/main_pmms.svg",
+    title: "Preventive Maintenance Management System for IT Equipment",
     description:
-      "A short, clear line about what this project does and the problem it solves.",
-    tags: ["React", "Node.js", "PostgreSQL"],
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    image: "/projects/project-3.jpg",
-    title: "Project Three",
-    description:
-      "A short, clear line about what this project does and the problem it solves.",
-    tags: ["Next.js", "Prisma", "Stripe"],
+      "A web application that streamlines the process of managing preventive maintenance schedules, tasks, and equipment history.",
+    tags: ["Css3", "Html5", "JavaScript", "Bootstrap5", "PHP", "MySQL"],
     liveUrl: "#",
     githubUrl: "#",
   },
@@ -87,7 +87,7 @@ function ProjectCard({ project, index }) {
       {/* Content */}
       <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-base sm:text-lg font-semibold text-stone-900 tracking-tight">
+          <h3 className="text-base  font-semibold text-stone-900 tracking-tight">
             {title}
           </h3>
           <a
@@ -99,7 +99,7 @@ function ProjectCard({ project, index }) {
           </a>
         </div>
 
-        <p className="text-sm text-stone-500 leading-relaxed">{description}</p>
+        <p className="text-xs text-stone-700 leading-relaxed">{description}</p>
 
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-2">
           {tags.map((tag) => (
@@ -118,7 +118,7 @@ function ProjectCard({ project, index }) {
             className="mt-1 inline-flex w-fit items-center gap-1.5 text-sm text-stone-500 transition-colors duration-300 hover:text-emerald-700"
           >
             <Github size={15} strokeWidth={1.75} />
-            View code
+            Details
           </a>
         )}
       </div>
