@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import { Code2, PenTool, Server, Wrench, ArrowUpRight } from "lucide-react";
 
@@ -56,26 +57,26 @@ function ServiceRow({ service, index }) {
       style={{ transitionDelay: inView ? `${index * 120}ms` : "0ms" }}
       className={`
         relative flex items-start gap-5 py-7 sm:py-8
-        border-t border-stone-200
+        border-t border-stone-200 dark:border-stone-700
         transition-[opacity,transform] duration-700 ease-out will-change-transform
         ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
       `}
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-stone-300 text-stone-700">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-stone-300 dark:border-stone-600 text-stone-700 dark:text-stone-300">
         <Icon size={18} strokeWidth={1.75} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-4">
-          <h3 className="text-lg sm:text-xl font-semibold text-stone-900 tracking-tight">
+          <h3 className="text-lg sm:text-xl font-semibold text-stone-900 dark:text-stone-50 tracking-tight">
             {title}
           </h3>
           <ArrowUpRight
             size={18}
             strokeWidth={1.75}
-            className="hidden sm:block shrink-0 text-stone-300"
+            className="hidden sm:block shrink-0 text-stone-300 dark:text-stone-600"
           />
         </div>
-        <p className="mt-2 text-sm sm:text-base text-stone-500 leading-relaxed max-w-md">
+        <p className="mt-2 text-sm sm:text-base text-stone-500 dark:text-stone-400 leading-relaxed max-w-md">
           {description}
         </p>
       </div>
@@ -86,7 +87,7 @@ function ServiceRow({ service, index }) {
 export default function ServicesSection({ services = defaultServices }) {
   const [introRef, introInView] = useInView(0.3);
   return (
-    <section className="relative w-full text-stone-900 bg-stone-50 font-sans">
+    <section className="relative w-full text-stone-900 dark:text-stone-50 bg-stone-50 dark:bg-stone-800 font-sans transition-colors duration-300">
       <div className="mx-auto max-w-5xl px-6 py-20 sm:py-28 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,280px)_1fr] gap-10 lg:gap-16">
           <div
@@ -101,18 +102,18 @@ export default function ServicesSection({ services = defaultServices }) {
               }
             `}
           >
-            <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-emerald-900">
+            <span className="text-xs sm:text-sm font-medium tracking-[0.2em] uppercase text-emerald-900 dark:text-emerald-400">
               What I do
             </span>
-            <h2 className="mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-stone-900">
+            <h2 className="mt-1 text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
               Services
             </h2>
-            <p className="mt-4 text-sm sm:text-base text-stone-500 leading-relaxed max-w-xs">
+            <p className="mt-4 text-sm sm:text-base text-stone-500 dark:text-stone-400 leading-relaxed max-w-xs">
               A focused set of skills I bring to every project, from the first
               line of code to the site staying fast in production.
             </p>
           </div>
-          <div className="border-b border-stone-200 overflow-hidden">
+          <div className="border-b border-stone-200 dark:border-stone-700 overflow-hidden">
             {services.map((service, index) => (
               <ServiceRow key={service.title} service={service} index={index} />
             ))}

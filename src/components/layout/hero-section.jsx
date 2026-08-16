@@ -54,7 +54,7 @@ export default function HeroSection() {
   return (
     <div
       ref={sectionRef}
-      className="relative w-full h-[calc(100vh-2.3rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900"
+      className="relative w-full h-[calc(100vh-2.3rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900 dark:bg-gray-900"
     >
       <ParticlesBackground />
       <div className="absolute inset-0 pt-5 lg:pt-0 flex justify-center items-end pointer-events-none">
@@ -76,9 +76,9 @@ export default function HeroSection() {
           z-10 flex items-end lg:items-center justify-start
           p-6 pb-8 lg:p-12
           bg-gradient-to-t from-black/90 via-emerald-950/70 to-transparent
-          lg:bg-emerald-900/90
+          lg:bg-emerald-700/90 dark:lg:bg-emerald-900/90
           lg:[clip-path:polygon(0_0,58%_0,42%_100%,0_100%)]
-          ${transitionClass}
+          ${transitionClass} 
           ${isVisible ? "opacity-100 translate-y-0 lg:translate-x-0" : "opacity-0 translate-y-8 lg:translate-y-0 lg:-translate-x-24"}
         `}
       >

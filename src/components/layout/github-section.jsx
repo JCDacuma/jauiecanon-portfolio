@@ -1,262 +1,64 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
-/**
- * GitHub Contributions Section
- * Usage: <GitHubSection username="yourusername" />
- *
- * Data source: github-contributions-api.jogruber.de (free, no auth required)
- * Styled to match the Skills section's dark stone/emerald glassmorphic theme.
- */
-
-const LEVEL_COLORS = [
-  "bg-white/[0.06]", // level 0 - no contributions
-  "bg-emerald-900/70", // level 1
-  "bg-emerald-700/80", // level 2
-  "bg-emerald-500", // level 3
-  "bg-emerald-400", // level 4
-];
-
-const MONTH_LABELS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const DAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""];
+import { GitHubCalendar } from "react-github-calendar";
+import { useNavbar } from "@/context/navbarContext.jsx";
 
 const headerVariants = {
   hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.94 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-  },
+const calendarTheme = {
+  light: ["#e9ecef", "#a7f3d0", "#5eead4", "#2dd4bf", "#059669"],
+  dark: ["#12241c", "#065f46", "#0d9488", "#10b981", "#6ee7b7"],
 };
 
-function GitHubCalendar({ username }) {
-  const [weeks, setWeeks] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [status, setStatus] = useState("loading"); // loading | error | ready
-  const [hovered, setHovered] = useState(null); // {date, count, x, y}
+const STATS_HOST =
+  "https://github-readme-stats-alpha-one-jaez1sfjbr.vercel.app/api/top-langs/";
 
-  useEffect(() => {
-    if (!username) return;
-    let cancelled = false;
-
-    async function load() {
-      setStatus("loading");
-      try {
-        const res = await fetch(
-          `https://github-contributions-api.jogruber.de/v4/${username}?y=last`,
-        );
-        if (!res.ok) throw new Error("Failed to fetch contributions");
-        const data = await res.json();
-        if (cancelled) return;
-
-        const contributions = data.contributions || [];
-        setTotal(contributions.reduce((sum, d) => sum + d.count, 0));
-        setWeeks(groupByWeek(contributions));
-        setStatus("ready");
-      } catch (err) {
-        if (!cancelled) setStatus("error");
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [username]);
-
-  if (status === "loading") {
-    return (
-      <div className="animate-pulse">
-        <div className="h-40 rounded-xl bg-white/[0.05]" />
-      </div>
-    );
-  }
-
-  if (status === "error") {
-    return (
-      <div className="text-sm text-stone-400">
-        Couldn't load GitHub contributions right now.
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <h3 className="text-sm font-semibold tracking-wide text-white uppercase">
-          {total.toLocaleString()} contributions
-          <span className="text-stone-400 normal-case font-normal">
-            {" "}
-            in the last year
-          </span>
-        </h3>
-        <a
-          href={`https://github.com/${username}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-stone-400 hover:text-emerald-400 transition-colors"
-        >
-          @{username}
-        </a>
-      </div>
-
-      <div className="overflow-x-auto pb-2 flex justify-center">
-        <div className="inline-flex gap-2 min-w-max">
-          {/* Day-of-week labels */}
-          <div className="flex flex-col gap-[3px] pr-1 pt-[18px]">
-            {DAY_LABELS.map((label, i) => (
-              <div
-                key={i}
-                className="h-[11px] text-[10px] leading-[11px] text-stone-500"
-              >
-                {label}
-              </div>
-            ))}
-          </div>
-
-          <div>
-            {/* Month labels */}
-            <div className="flex gap-[3px] mb-1 text-[10px] text-stone-500">
-              {weeks.map((week, i) => {
-                const firstDay = week.find(Boolean);
-                const showLabel =
-                  firstDay &&
-                  (i === 0 || new Date(firstDay.date).getDate() <= 7) &&
-                  (i === 0 ||
-                    new Date(weeks[i - 1].find(Boolean)?.date).getMonth() !==
-                      new Date(firstDay.date).getMonth());
-                return (
-                  <div key={i} className="w-[11px]">
-                    {showLabel
-                      ? MONTH_LABELS[new Date(firstDay.date).getMonth()]
-                      : ""}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Grid */}
-            <div className="flex gap-[3px]">
-              {weeks.map((week, wi) => (
-                <div key={wi} className="flex flex-col gap-[3px]">
-                  {week.map((day, di) =>
-                    day ? (
-                      <div
-                        key={di}
-                        className={`w-[11px] h-[11px] rounded-[2px] ${LEVEL_COLORS[day.level]} cursor-pointer transition-transform hover:scale-125`}
-                        onMouseEnter={(e) => {
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          setHovered({
-                            date: day.date,
-                            count: day.count,
-                            x: rect.left + rect.width / 2,
-                            y: rect.top,
-                          });
-                        }}
-                        onMouseLeave={() => setHovered(null)}
-                      />
-                    ) : (
-                      <div key={di} className="w-[11px] h-[11px]" />
-                    ),
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Legend */}
-      <div className="flex items-center justify-center gap-1 mt-3 text-[11px] text-stone-400">
-        <span>Less</span>
-        {LEVEL_COLORS.map((color, i) => (
-          <div key={i} className={`w-[10px] h-[10px] rounded-[2px] ${color}`} />
-        ))}
-        <span>More</span>
-      </div>
-
-      {/* Tooltip */}
-      {hovered && (
-        <div
-          className="fixed z-50 px-2 py-1 text-xs text-white bg-stone-900 border border-white/10 rounded shadow-lg pointer-events-none -translate-x-1/2 -translate-y-full -mt-2"
-          style={{ left: hovered.x, top: hovered.y }}
-        >
-          {hovered.count} contribution{hovered.count !== 1 ? "s" : ""} on{" "}
-          {new Date(hovered.date).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function TopLanguages({ username }) {
-  const [loaded, setLoaded] = useState(false);
-
-  const src = `https://github-readme-stats-alpha-one-jaez1sfjbr.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=transparent&hide_border=true&bg_color=00000000&title_color=34d399&text_color=d6d3d1&count_private=true&langs_count=8`;
-
-  return (
-    <div className="h-full flex flex-col">
-      <h3 className="text-sm font-semibold tracking-wide text-white uppercase mb-5">
-        Most Used Languages
-      </h3>
-      <div className="relative flex-1 flex items-center justify-center min-h-[220px]">
-        {!loaded && (
-          <div className="absolute inset-0 animate-pulse rounded-xl bg-white/[0.05]" />
-        )}
-        <img
-          src={src}
-          alt={`${username}'s most used languages on GitHub`}
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-          className={`w-full h-auto transition-opacity duration-500 ${
-            loaded ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      </div>
-    </div>
-  );
+function buildTopLangsUrl(username, isDarkMode) {
+  const params = new URLSearchParams({
+    username,
+    layout: "compact",
+    hide_title: "true",
+    hide_border: "true",
+    bg_color: "00000000",
+    count_private: "true",
+    langs_count: "8",
+    text_color: isDarkMode ? "e5e7eb" : "44403c",
+    title_color: isDarkMode ? "34d399" : "059669",
+    icon_color: isDarkMode ? "34d399" : "059669",
+  });
+  return `${STATS_HOST}?${params.toString()}`;
 }
 
 export default function GitHubSection({ username }) {
+  const { isDarkMode } = useNavbar();
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgLoaded(false);
+    setImgError(false);
+    const timeout = setTimeout(() => {
+      setImgLoaded((loaded) => {
+        if (!loaded) setImgError(true);
+        return loaded;
+      });
+    }, 12000);
+    return () => clearTimeout(timeout);
+  }, [isDarkMode, username]);
+
   return (
     <section
       id="github"
-      className="relative  flex flex-col items-center pt-15 overflow-hidden bg-stone-900"
+      className="relative flex flex-col items-center pt-15 pb-16 overflow-hidden bg-stone-50 dark:bg-stone-800 transition-colors duration-300"
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] bg-[size:32px_32px]" />
-        <div className="absolute -top-32 -left-32 w-[28rem] h-[28rem] bg-emerald-500/25 rounded-full blur-[80px]" />
-        <div className="absolute top-1/3 -right-32 w-[26rem] h-[26rem] bg-teal-400/15 rounded-full blur-[80px]" />
-        <div className="absolute inset-0 bg-emerald-900/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-emerald-950 via-transparent to-emerald-950/60" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(0,0,0,0.04)_1px,transparent_0)] dark:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.06)_1px,transparent_0)] bg-[size:32px_32px]" />
+        <div className="absolute -top-32 -left-32 w-[28rem] h-[28rem] bg-emerald-400/15 dark:bg-emerald-500/25 rounded-full blur-[80px]" />
+        <div className="absolute top-1/3 -right-32 w-[26rem] h-[26rem] bg-teal-300/10 dark:bg-teal-400/15 rounded-full blur-[80px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-white/60 dark:from-emerald-950 dark:via-transparent dark:to-emerald-950/60" />
       </div>
 
       <div className="w-full mx-auto max-w-6xl px-4 sm:px-6">
@@ -265,72 +67,95 @@ export default function GitHubSection({ username }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: false, amount: 0.4 }}
-          className="text-center mb-6 pt-5 sm:mb-8"
+          className="text-center mb-10 pt-5 sm:mb-12"
         >
-          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-400 uppercase mb-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs sm:text-sm font-semibold tracking-widest text-emerald-600 dark:text-emerald-400 uppercase mb-4">
             Consistency Builds Progress
           </span>
-
-          <h2 className="text-2xl font-bold text-white">
-            My <span className="text-emerald-400">GitHub</span> Activity
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 dark:text-white">
+            My{" "}
+            <span className="bg-gradient-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">
+              GitHub
+            </span>{" "}
+            Activity
           </h2>
-
-          <div className="mt-4 mx-auto mr-[50%] w-16 h-1 rounded-full bg-emerald-400" />
+          <div className="mt-5 mx-auto mr-[50%] w-16 h-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300" />
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-            className="lg:col-span-2 rounded-2xl border border-white/10 bg-white/[0.05] p-5 sm:p-6 flex flex-col justify-center will-change-transform"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="lg:col-span-2 rounded-2xl border border-stone-900/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-sm p-5 sm:p-6 shadow-sm"
           >
-            <GitHubCalendar username={username} />
+            <h3 className="text-sm font-semibold tracking-wide text-stone-900 dark:text-white uppercase mb-4">
+              Contribution Activity
+            </h3>
+            <div className="overflow-x-auto -mx-1 px-1">
+              <div className="min-w-[640px]">
+                <GitHubCalendar
+                  username={username}
+                  colorScheme={isDarkMode ? "dark" : "light"}
+                  theme={calendarTheme}
+                  blockSize={11}
+                  blockMargin={4}
+                  fontSize={12}
+                  showTotalCount
+                  showWeekdayLabels
+                />
+              </div>
+            </div>
           </motion.div>
 
           <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ delay: 0.08 }}
-            className="rounded-2xl border border-white/10 bg-white/[0.05] p-5 sm:p-6 will-change-transform"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+            className="rounded-2xl border border-stone-900/10 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] backdrop-blur-sm p-5 sm:p-6 shadow-sm relative"
           >
-            <TopLanguages username={username} />
+            <h3 className="text-sm font-semibold tracking-wide text-stone-900 dark:text-white uppercase mb-4">
+              Top Languages
+            </h3>
+
+            {!imgLoaded && !imgError && (
+              <div className="flex items-center gap-2.5 py-6 text-sm text-stone-500 dark:text-stone-400">
+                <span className="w-3.5 h-3.5 rounded-full border-2 border-emerald-500/30 dark:border-emerald-400/30 border-t-emerald-500 dark:border-t-emerald-400 animate-spin" />
+                Fetching languages...
+              </div>
+            )}
+
+            {imgError && (
+              <p className="text-sm text-stone-500 dark:text-stone-400">
+                Couldn't load language stats.{" "}
+                <a
+                  href={buildTopLangsUrl(username, isDarkMode)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline hover:text-emerald-600 dark:hover:text-emerald-400"
+                >
+                  Open directly
+                </a>
+              </p>
+            )}
+
+            <img
+              key={isDarkMode ? "dark" : "light"}
+              src={buildTopLangsUrl(username, isDarkMode)}
+              alt={`${username}'s most used languages`}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgError(true)}
+              className={`w-full h-auto transition-opacity duration-300 ${
+                imgLoaded
+                  ? "opacity-100"
+                  : "opacity-0 absolute pointer-events-none -z-10"
+              }`}
+            />
           </motion.div>
         </div>
       </div>
     </section>
   );
-}
-
-/** Groups a flat array of {date, count, level} into weeks (columns) starting on Sunday */
-function groupByWeek(contributions) {
-  if (!contributions.length) return [];
-
-  const byDate = new Map(contributions.map((d) => [d.date, d]));
-  const start = new Date(contributions[0].date);
-  const end = new Date(contributions[contributions.length - 1].date);
-
-  const alignedStart = new Date(start);
-  alignedStart.setDate(alignedStart.getDate() - alignedStart.getDay());
-
-  const weeks = [];
-  let current = [];
-  let cursor = new Date(alignedStart);
-
-  while (cursor <= end) {
-    const iso = cursor.toISOString().slice(0, 10);
-    current.push(byDate.get(iso) || null);
-
-    if (cursor.getDay() === 6) {
-      weeks.push(current);
-      current = [];
-    }
-    cursor.setDate(cursor.getDate() + 1);
-  }
-  if (current.length) weeks.push(current);
-
-  return weeks;
 }

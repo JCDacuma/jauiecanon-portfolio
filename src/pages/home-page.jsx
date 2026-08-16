@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Hamburger from "hamburger-react";
+import { useNavbar } from "@/context/navbarContext.jsx";
 import {
   motion,
   useScroll,
   useTransform,
   AnimatePresence,
 } from "framer-motion";
-
-import { useNavbar } from "@/context/navbarContext.jsx";
 
 import AboutMeSection from "@/components/layout/abount-me-section.jsx";
 import SkillsSection from "@/components/layout/skills-section";
@@ -19,7 +18,7 @@ import ProjectShowcase from "@/components/layout/projectShowcase.jsx";
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState("home");
 
-  const { setIsMenuOpen } = useNavbar();
+  const { setIsMenuOpen, isDarkMode } = useNavbar();
   useEffect(() => {
     // Check if particlesJS was loaded from index.html
     if (window.particlesJS) {
@@ -29,7 +28,7 @@ export default function HomePage() {
     }
   }, []);
   return (
-    <div className="relative  bg-linear-to-b from-gray-50 to-white  ">
+    <div className="relative bg-stone-50 dark:bg-stone-800  ">
       {/* Mobile Menu */}
 
       {/* Main Section */}
@@ -42,7 +41,7 @@ export default function HomePage() {
       <ServicesSection />
 
       {/* Skills Section */}
-      <SkillsSection />
+      <SkillsSection isDarkMode={isDarkMode} />
 
       {/* GitHub Contributions Section */}
       <GitHubContributions username={"JcDacuma"} />
