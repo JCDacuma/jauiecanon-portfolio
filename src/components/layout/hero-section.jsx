@@ -12,11 +12,13 @@ const accountLinks = [
   },
   { name: "Mail", url: "mailto:your-email@example.com", icon: Mail },
 ];
-export default function HeroSection() {
+
+export default function HeroSection({ isDarkMode = false }) {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [skipTransition, setSkipTransition] = useState(true);
   const hasLeftRef = useRef(false);
+
   useEffect(() => {
     const initialTimer = setTimeout(() => {
       setSkipTransition(false);
@@ -59,15 +61,35 @@ export default function HeroSection() {
       <ParticlesBackground />
       <div className="absolute inset-0 pt-5 lg:pt-0 flex justify-center items-end pointer-events-none">
         <div className="relative w-full h-full flex justify-center lg:justify-center items-end lg:absolute lg:right-0 lg:bottom-0 lg:w-[55%] lg:h-[90%]">
-          <img
-            src="/aboutme/barongtagalog_myimage_transparent.png"
-            alt="Hero"
+          <div
             className={`
-              h-[86%] sm:h-[90%] lg:h-full w-auto max-w-none object-contain object-bottom mx-s lg:mx-0
-              ${transitionClass}
-              ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 lg:translate-x-40"}
-            `}
-          />
+      relative h-[86%] sm:h-[90%] lg:h-full w-auto max-w-none mx-s lg:mx-0
+      ${transitionClass}
+      ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 lg:translate-x-40"}
+    `}
+          >
+            {/* Light mode image */}
+            <img
+              src="/aboutme/barong_tagalog_light.svg"
+              alt="Hero"
+              className={`
+        h-full w-auto max-w-none object-contain object-bottom
+        transition-opacity duration-700 ease-in-out
+        ${isDarkMode ? "opacity-0" : "opacity-100"}
+      `}
+            />
+
+            {/* Dark mode image, absolutely stacked on top */}
+            <img
+              src="/aboutme/darkmode_barongtagalog.svg"
+              alt="Hero"
+              className={`
+        absolute inset-0 h-full w-auto max-w-none object-contain object-bottom
+        transition-opacity duration-700 ease-in-out
+        ${isDarkMode ? "opacity-100" : "opacity-0"}
+      `}
+            />
+          </div>
         </div>
       </div>
       <div

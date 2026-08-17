@@ -32,7 +32,7 @@ export default function HomePage() {
       {/* Mobile Menu */}
 
       {/* Main Section */}
-      <HeroSection />
+      <HeroSection isDarkMode={isDarkMode} />
 
       {/* About Section */}
       <AboutMeSection />

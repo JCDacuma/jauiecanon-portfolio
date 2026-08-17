@@ -8,17 +8,32 @@ import {
 } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const NavbarContext = createContext(null);
-const SECTIONS = ["home", "about", "skills", "works"];
-const NAV_ITEMS = ["Home", "About", "Skills", "Works"];
+const SECTIONS = ["home", "about", "services", "skills", "works"];
+const NAV_ITEMS = ["Home", "About", "Services", "Skills", "Works"];
+const THEME_STORAGE_KEY = "theme";
+
+// Runs only on first render; safe against SSR since it checks for `window`.
+function getInitialTheme() {
+  if (typeof window === "undefined") return false;
+  const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+  if (stored === "dark") return true;
+  if (stored === "light") return false;
+  // No saved preference yet — fall back to the OS/browser setting.
+  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+}
 
 export default function NavbarProvider({ children }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(getInitialTheme);
   const ticking = useRef(false);
+  const location = useLocation();
+
+  const isNotHomePage = location.pathname !== "/";
 
   useEffect(() => {
     const onScroll = () => {
@@ -27,7 +42,6 @@ export default function NavbarProvider({ children }) {
       requestAnimationFrame(() => {
         const scrollPos = window.scrollY + 100;
         setIsScrolled(window.scrollY > 80);
-
         for (const id of SECTIONS) {
           const el = document.getElementById(id);
           if (
@@ -42,7 +56,6 @@ export default function NavbarProvider({ children }) {
         ticking.current = false;
       });
     };
-
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
@@ -50,13 +63,16 @@ export default function NavbarProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDarkMode);
+    window.localStorage.setItem(
+      THEME_STORAGE_KEY,
+      isDarkMode ? "dark" : "light",
+    );
   }, [isDarkMode]);
 
   const scrollToSection = useCallback((sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
     setIsMenuOpen(false);
   }, []);
-
   const toggleTheme = useCallback(() => setIsDarkMode((prev) => !prev), []);
   const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
 
@@ -68,7 +84,7 @@ export default function NavbarProvider({ children }) {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={`fixed top-0 left-0 right-0 py-1 z-50 backdrop-blur-md shadow-sm transition-colors duration-300 ${
-          isScrolled
+          isScrolled || isNotHomePage
             ? "bg-emerald-900/90 dark:bg-emerald-950/90"
             : "bg-emerald-800/5 dark:bg-emerald-900/10"
         } text-stone-900 dark:text-stone-100`}
@@ -76,11 +92,10 @@ export default function NavbarProvider({ children }) {
         <div className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-2">
             <img
-              src="/logo/logo.svg"
+              src="/logo/dev_logo.svg"
               alt="Logo"
-              className="w-12 h-12 object-contain drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
+              className="w-10 h-10 object-contain drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]"
             />
-
             <div className="hidden md:flex items-center space-x-8 md:mr-20">
               {NAV_ITEMS.map((item) => {
                 const id = item.toLowerCase();
@@ -101,7 +116,6 @@ export default function NavbarProvider({ children }) {
                   </motion.button>
                 );
               })}
-
               <button
                 type="button"
                 aria-label={
@@ -124,7 +138,6 @@ export default function NavbarProvider({ children }) {
                 </AnimatePresence>
               </button>
             </div>
-
             <div className="flex items-center gap-2 md:hidden absolute right-2">
               <button
                 type="button"
@@ -132,17 +145,16 @@ export default function NavbarProvider({ children }) {
                   isDarkMode ? "Switch to light mode" : "Switch to dark mode"
                 }
                 onClick={toggleTheme}
-                className="rounded-lg p-2 hover:bg-emerald-700/30 dark:hover:bg-emerald-700/50 transition-colors"
+                className="rounded-lg text-slate-100 p-2 hover:bg-emerald-700/30 dark:hover:bg-emerald-700/50 transition-colors"
               >
                 {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
               </button>
-
               <button
                 type="button"
                 aria-label={isMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={isMenuOpen}
                 onClick={toggleMenu}
-                className="rounded-lg hover:bg-emerald-700/30 dark:hover:bg-emerald-700/50 p-2 transition-colors"
+                className="rounded-lg text-slate-100 hover:bg-emerald-700/30 dark:hover:bg-emerald-700/50 p-2 transition-colors"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   {isMenuOpen ? (
@@ -172,7 +184,6 @@ export default function NavbarProvider({ children }) {
               </button>
             </div>
           </div>
-
           <AnimatePresence>
             {isMenuOpen && (
               <motion.div
