@@ -93,7 +93,7 @@ function buildStreakUrl(username, isDarkMode) {
 }
 
 function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
-  const [status, setStatus] = useState("loading"); // "loading" | "loaded" | "error"
+  const [status, setStatus] = useState("loading");
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
 
   return (
     <div
-      className={`rounded-2xl w-full bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-colors duration-300 min-h-[180px] ${INSET} ${
+      className={`rounded-2xl w-full bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-colors duration-300 min-h-[120px] max-h-120 ${INSET} ${
         centered ? "flex flex-col items-center text-center" : ""
       }`}
     >
@@ -155,7 +155,7 @@ function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
         alt={alt}
         onLoad={() => setStatus("loaded")}
         onError={() => setStatus("error")}
-        className={`w-full h-auto transition-opacity duration-300 ${
+        className={`w-full h-40 transition-opacity duration-300 ${
           centered ? "mx-auto" : ""
         } ${
           status === "loaded"
@@ -175,7 +175,7 @@ export default function GitHubSection({ username }) {
       id="github"
       className="relative flex flex-col items-center pt-15 pb-16 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
     >
-      <div className="w-full mx-auto max-w-5xl px-4 sm:px-6">
+      <div className="w-full mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
           variants={headerVariants}
           initial="hidden"
