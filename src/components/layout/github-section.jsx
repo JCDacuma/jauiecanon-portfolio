@@ -155,7 +155,7 @@ function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
         alt={alt}
         onLoad={() => setStatus("loaded")}
         onError={() => setStatus("error")}
-        className={`w-full h-40 transition-opacity duration-300 ${
+        className={`w-full h-30 transition-opacity duration-300 ${
           centered ? "mx-auto" : ""
         } ${
           status === "loaded"
@@ -173,7 +173,7 @@ export default function GitHubSection({ username }) {
   return (
     <section
       id="github"
-      className="relative flex flex-col items-center pt-15 pb-16 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
+      className="relative flex flex-col items-center pt-15 pb-16  overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
     >
       <div className="w-full mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div

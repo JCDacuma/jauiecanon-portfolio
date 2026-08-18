@@ -54,7 +54,8 @@ export default function HeroSection({ isDarkMode = false }) {
     ? ""
     : "transition-all duration-1000 ease-out";
   return (
-    <div
+    <section
+      id="home"
       ref={sectionRef}
       className="relative w-full h-[calc(100vh-2.3rem)] sm:h-screen overflow-hidden text-white font-sans bg-stone-900 dark:bg-gray-900"
     >
@@ -147,6 +148,6 @@ export default function HeroSection({ isDarkMode = false }) {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ExternalLink, Github, X } from "lucide-react";
 import { useMediaQuery } from "react-responsive";
 
 const RAISED =
@@ -10,6 +10,11 @@ const RAISED =
 const RAISED_HOVER =
   "hover:shadow-[3px_3px_8px_rgba(168,162,158,0.35),-3px_-3px_8px_rgba(255,255,255,0.85)] " +
   "dark:hover:shadow-[3px_3px_10px_rgba(0,0,0,0.55),-3px_-3px_10px_rgba(255,255,255,0.025)]";
+// Lighter raised variant — used for the tech-stack shell on mobile so it
+// still reads as a lifted card without the heavier blur/offset of RAISED.
+const RAISED_SM =
+  "shadow-[4px_4px_10px_rgba(168,162,158,0.4),-4px_-4px_10px_rgba(255,255,255,0.8)] " +
+  "dark:shadow-[4px_4px_12px_rgba(0,0,0,0.45),-4px_-4px_12px_rgba(255,255,255,0.02)]";
 const INSET =
   "shadow-[inset_3px_3px_7px_rgba(168,162,158,0.4),inset_-3px_-3px_7px_rgba(255,255,255,0.85)] " +
   "dark:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.55),inset_-3px_-3px_7px_rgba(255,255,255,0.025)]";
@@ -51,39 +56,74 @@ export function StackPreviewChip({ icon: Icon, label }) {
     </span>
   );
 }
-export function TechGroup({ icon: Icon, label, items, className = "" }) {
+
+// Fullscreen tap-to-zoom viewer for images that need to be seen at full
+// resolution (used by the System Architecture diagram on small screens).
+function ImageLightbox({ src, alt, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+
   return (
-    <div
-      className={`flex h-full flex-col rounded-2xl p-4 sm:p-5 transition-[background-color,box-shadow] duration-500 ${INSET} ${className}`}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      onClick={onClose}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-900/90 dark:bg-black/90 backdrop-blur-sm p-4 sm:p-8"
     >
-      <div className="flex items-center gap-2.5 mb-3.5">
-        <span
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-stone-100 dark:bg-stone-800 text-emerald-700 dark:text-emerald-400 transition-colors duration-300 ${RAISED}`}
-        >
-          <Icon size={15} strokeWidth={2} />
-        </span>
-        <h3 className="text-xs sm:text-sm font-semibold tracking-wide uppercase text-stone-700 dark:text-stone-300 transition-colors duration-300">
-          {label}
-        </h3>
-      </div>
-      <div className="flex flex-wrap gap-2 content-start">
-        {items.map((item) => (
-          <span
-            key={item}
-            className="rounded-lg bg-stone-100 dark:bg-stone-800 px-2.5 py-1.5 text-xs font-medium text-stone-600 dark:text-stone-300 transition-colors duration-300"
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
+      <motion.img
+        initial={{ scale: 0.96, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.97, opacity: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        src={src}
+        alt={alt}
+        onClick={(e) => e.stopPropagation()}
+        className="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl select-none"
+      />
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Close"
+        className={`absolute top-4 right-4 sm:top-6 sm:right-6 flex h-10 w-10 items-center justify-center rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 transition-[background-color,box-shadow,color] duration-300 ${RAISED} ${RAISED_HOVER} hover:text-emerald-700 dark:hover:text-emerald-400`}
+      >
+        <X size={18} strokeWidth={2} />
+      </button>
+    </motion.div>
   );
 }
 
 export function FeatureCard({ feature, index }) {
   const { image, title, description } = feature;
   const isReversed = index % 2 === 1;
-
+  const isMobile = useMediaQuery({ query: "(max-width: 1023px)" });
+  const imageMotionProps = isMobile
+    ? {
+        initial: { opacity: 0, y: 28 },
+        whileInView: { opacity: 1, y: 0 },
+      }
+    : {
+        initial: { opacity: 0, x: isReversed ? 24 : -24 },
+        whileInView: { opacity: 1, x: 0 },
+      };
+  const textMotionProps = isMobile
+    ? {
+        initial: { opacity: 0, y: 28 },
+        whileInView: { opacity: 1, y: 0 },
+      }
+    : {
+        initial: { opacity: 0, x: isReversed ? -24 : 24 },
+        whileInView: { opacity: 1, x: 0 },
+      };
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -95,10 +135,13 @@ export function FeatureCard({ feature, index }) {
       }`}
     >
       <motion.div
-        initial={{ opacity: 0, x: isReversed ? 24 : -24 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        {...imageMotionProps}
         viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+        transition={{
+          duration: isMobile ? 0.5 : 0.6,
+          ease: "easeOut",
+          delay: 0.1,
+        }}
         className="w-full lg:w-1/2 shrink-0"
       >
         <div
@@ -117,10 +160,13 @@ export function FeatureCard({ feature, index }) {
         </div>
       </motion.div>
       <motion.div
-        initial={{ opacity: 0, x: isReversed ? -24 : 24 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        {...textMotionProps}
         viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.18 }}
+        transition={{
+          duration: isMobile ? 0.5 : 0.6,
+          ease: "easeOut",
+          delay: 0.18,
+        }}
         className="w-full lg:w-1/2 text-center lg:text-left"
       >
         <div className="mx-auto lg:mx-0 mb-3 h-1 w-10 rounded-full bg-emerald-600 dark:bg-emerald-500 transition-colors duration-300" />
@@ -135,13 +181,63 @@ export function FeatureCard({ feature, index }) {
   );
 }
 
+function normalizeTechItems(value) {
+  if (Array.isArray(value)) return value;
+  if (value && Array.isArray(value.items)) return value.items;
+  if (value && Array.isArray(value.technologies)) return value.technologies;
+  if (value && typeof value === "object") return [value];
+  return [];
+}
+
+function TechStackGroup({ category, items }) {
+  const normalized = normalizeTechItems(items);
+  if (normalized.length === 0) return null;
+  return (
+    <div className="flex flex-col gap-3 sm:gap-4">
+      <h3 className="text-xs font-semibold tracking-wide uppercase text-stone-600 dark:text-stone-400 transition-colors duration-300">
+        {category}
+      </h3>
+      <div className="flex flex-wrap gap-2.5 sm:gap-3">
+        {normalized.map((item, i) => (
+          <TechStackItem key={item.name ?? item ?? i} item={item} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TechStackItem({ item }) {
+  const isString = typeof item === "string";
+  const name = isString ? item : item.name;
+  const Icon = isString ? null : item.icon;
+  return (
+    <motion.span
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className={`inline-flex items-center gap-2.5 rounded-2xl bg-stone-100 dark:bg-stone-800 pl-2 pr-4 py-2 text-xs font-medium text-stone-600 dark:text-stone-300 transition-[background-color,box-shadow,color] duration-300 ${RAISED} ${RAISED_HOVER} hover:text-emerald-700 dark:hover:text-emerald-400`}
+    >
+      {Icon && (
+        <span
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-stone-100 dark:bg-stone-800 text-emerald-700 dark:text-emerald-400 transition-colors duration-300 ${INSET_SM}`}
+        >
+          <Icon size={15} strokeWidth={2} />
+        </span>
+      )}
+      {name}
+    </motion.span>
+  );
+}
+
 export default function ProjectLayout({ project }) {
   const navigate = useNavigate();
+  const [isArchLightboxOpen, setIsArchLightboxOpen] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const stackGroups = Object.values(project.techStack);
+
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
   return (
     <section
       id={project.sectionId}
@@ -179,6 +275,7 @@ export default function ProjectLayout({ project }) {
               </div>
             </NeumorphicFrame>
           </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -220,6 +317,7 @@ export default function ProjectLayout({ project }) {
           </motion.div>
         </div>
 
+        {/* Tech Stack */}
         <div className="mt-20 sm:mt-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -233,32 +331,28 @@ export default function ProjectLayout({ project }) {
               Tech Stack
             </h2>
           </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.15 }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
-            className={`rounded-3xl bg-stone-100 dark:bg-stone-800 p-3 sm:p-4 transition-[background-color,box-shadow] duration-500 ${!isMobile && RAISED}`}
+            className={`rounded-3xl bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 lg:p-6 transition-[background-color,box-shadow] duration-500 ${
+              isMobile ? RAISED_SM : RAISED
+            }`}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-3  gap-2.5 sm:gap-3 auto-rows-fr">
-              {stackGroups.map((group) => (
-                <TechGroup
-                  key={group.label}
-                  icon={group.icon}
-                  label={group.label}
-                  items={group.items}
-                  className={
-                    group.label === "Frontend"
-                      ? "col-span-1 sm:col-span-1 lg:col-span-2"
-                      : ""
-                  }
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-7 sm:gap-y-8">
+              {Object.entries(project.techStack).map(([category, items]) => (
+                <TechStackGroup
+                  key={category}
+                  category={category}
+                  items={items}
                 />
               ))}
             </div>
           </motion.div>
         </div>
 
+        {/* System Architecture */}
         <div className="mt-24 sm:mt-28 lg:mt-32">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -271,6 +365,7 @@ export default function ProjectLayout({ project }) {
             <h2 className="mt-2 text-2xl sm:text-3xl mb-10 lg:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50 transition-colors duration-300">
               System Architecture
             </h2>
+
             <motion.div
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -278,21 +373,45 @@ export default function ProjectLayout({ project }) {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
               <NeumorphicFrame className="max-w-5xl mx-auto">
-                <div className="relative w-full overflow-hidden rounded-3xl bg-stone-200/60 dark:bg-stone-900/60">
-                  <img
-                    src={project.architecture.image}
-                    alt="System architecture diagram"
-                    className="w-full h-auto object-contain"
-                  />
+                {/*
+                  On small screens the diagram is rendered at a real,
+                  legible width (min-w-[640px]) and scrolls horizontally
+                  instead of being squashed to the viewport, which is what
+                  was destroying legibility before. Tapping it opens a
+                  fullscreen lightbox for a crisp, full-resolution view.
+                */}
+                <div className="relative w-full overflow-x-auto overflow-y-hidden rounded-3xl bg-stone-200/60 dark:bg-stone-900/60 [-webkit-overflow-scrolling:touch]">
+                  <button
+                    type="button"
+                    onClick={() => setIsArchLightboxOpen(true)}
+                    className="block w-full cursor-zoom-in"
+                    aria-label="Enlarge architecture diagram"
+                  >
+                    <img
+                      src={project.architecture.image}
+                      alt="System architecture diagram"
+                      loading="lazy"
+                      className="h-auto w-full min-w-[640px] sm:min-w-0 object-contain"
+                    />
+                  </button>
+                </div>
+                <div className="mt-2 flex justify-center sm:hidden">
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-stone-800 px-3 py-1 text-[11px] font-medium text-stone-500 dark:text-stone-400 transition-colors duration-300 ${INSET_SM}`}
+                  >
+                    Scroll or tap to zoom
+                  </span>
                 </div>
               </NeumorphicFrame>
             </motion.div>
+
             <p className="mt-8 text-sm sm:text-base text-stone-500 dark:text-stone-400 leading-relaxed transition-colors duration-300">
               {project.architecture.description}
             </p>
           </motion.div>
         </div>
 
+        {/* Key Features */}
         <div className="mt-24 sm:mt-28 lg:mt-32">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -317,6 +436,16 @@ export default function ProjectLayout({ project }) {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isArchLightboxOpen && (
+          <ImageLightbox
+            src={project.architecture.image}
+            alt="System architecture diagram"
+            onClose={() => setIsArchLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

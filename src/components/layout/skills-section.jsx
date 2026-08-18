@@ -203,11 +203,6 @@ const SkillCard = memo(function SkillCard({ category }) {
               {category.title}
             </h3>
           </div>
-          <span
-            className={`font-mono text-[10px] font-semibold tracking-wider bg-stone-100 dark:bg-stone-800 ${accent.tagText} px-2 py-1 rounded-md tabular-nums transition-colors duration-300 ${INSET_SM}`}
-          >
-            {String(category.skills.length).padStart(2, "0")} SKILLS
-          </span>
         </div>
 
         <ul className="space-y-4">
@@ -254,7 +249,7 @@ export default function SkillsSection() {
   return (
     <section
       id="skills"
-      className="relative flex flex-col items-center mt-15 pb-5 pt-10 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
+      className="relative flex flex-col items-center mt-5 pb-5 pt-10 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
     >
       <div className="w-full mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
@@ -264,19 +259,17 @@ export default function SkillsSection() {
           viewport={{ once: false, amount: 0.4 }}
           className="text-center mb-12 pt-5 sm:mb-16 will-change-transform"
         >
-          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-700 dark:text-emerald-400 uppercase mb-4 transition-colors duration-300">
+          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-800 dark:text-emerald-400 uppercase mb-2 transition-colors duration-300">
             What I bring to the table
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50 transition-colors duration-300">
+          <h2 className="mt-1 text-2xl sm:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-50 transition-colors duration-300">
             Skills That{" "}
             <span className="text-emerald-500 dark:text-emerald-400">Fuel</span>{" "}
             My Passion
           </h2>
           <div className="mt-5 hidden lg:flex w-16 h-1.5 mx-auto mr-[47.55%] rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300" />
 
-          <div className="relative mt-10 py-4 rounded-2xl bg-stone-50 dark:bg-stone-800 overflow-hidden transition-colors duration-300">
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-stone-100 dark:from-stone-800 to-transparent z-10 transition-colors duration-300" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-stone-100 dark:from-stone-800 to-transparent z-10 transition-colors duration-300" />
+          <div className="relative mt-10 py-4 rounded-2xl bg-stone-50 dark:bg-stone-900 overflow-hidden transition-colors duration-300">
             <LogoLoop
               logos={skillsLogos}
               speed={100}

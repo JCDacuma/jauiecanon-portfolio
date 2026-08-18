@@ -32,15 +32,16 @@ const PROJECT = {
       icon: Database,
       items: ["MySQL", "Redis"],
     },
-    externalServices: {
-      label: "External Services",
-      icon: Package,
-      items: ["Brevo"],
-    },
+
     Security: {
       label: "Security",
       icon: ShieldCheck,
       items: ["Laravel Sanctum (SPA)", "Oauth2.0"],
+    },
+    externalServices: {
+      label: "External Services",
+      icon: Package,
+      items: ["Brevo"],
     },
   },
   architecture: {
