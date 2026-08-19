@@ -7,6 +7,7 @@ import {
   useTransform,
   AnimatePresence,
 } from "framer-motion";
+import Chatbot from "@/components/ui/chatBox.jsx";
 
 import AboutMeSection from "@/components/layout/abount-me-section.jsx";
 import SkillsSection from "@/components/layout/skills-section";
@@ -14,6 +15,7 @@ import HeroSection from "@/components/layout/hero-section.jsx";
 import ServicesSection from "@/components/layout/services-section.jsx";
 import GitHubContributions from "@/components/layout/github-section.jsx";
 import ProjectShowcase from "@/components/layout/projectShowcase.jsx";
+import CertificateSection from "@/components/layout/certificate-section.jsx";
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState("home");
@@ -29,6 +31,7 @@ export default function HomePage() {
   }, []);
   return (
     <div className="relative bg-stone-50 dark:bg-stone-800  ">
+      <Chatbot />
       {/* Mobile Menu */}
 
       {/* Main Section */}
@@ -48,6 +51,9 @@ export default function HomePage() {
 
       {/* Works Section */}
       <ProjectShowcase />
+
+      {/* Certifications Section */}
+      <CertificateSection />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-4">

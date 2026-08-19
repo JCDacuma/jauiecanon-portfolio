@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ExternalLink, Github, X } from "lucide-react";
@@ -10,8 +10,6 @@ const RAISED =
 const RAISED_HOVER =
   "hover:shadow-[3px_3px_8px_rgba(168,162,158,0.35),-3px_-3px_8px_rgba(255,255,255,0.85)] " +
   "dark:hover:shadow-[3px_3px_10px_rgba(0,0,0,0.55),-3px_-3px_10px_rgba(255,255,255,0.025)]";
-// Lighter raised variant — used for the tech-stack shell on mobile so it
-// still reads as a lifted card without the heavier blur/offset of RAISED.
 const RAISED_SM =
   "shadow-[4px_4px_10px_rgba(168,162,158,0.4),-4px_-4px_10px_rgba(255,255,255,0.8)] " +
   "dark:shadow-[4px_4px_12px_rgba(0,0,0,0.45),-4px_-4px_12px_rgba(255,255,255,0.02)]";
@@ -57,9 +55,29 @@ export function StackPreviewChip({ icon: Icon, label }) {
   );
 }
 
-// Fullscreen tap-to-zoom viewer for images that need to be seen at full
-// resolution (used by the System Architecture diagram on small screens).
+const MIN_SCALE = 1;
+const MAX_SCALE = 4;
+const DOUBLE_TAP_SCALE = 2.5;
+
+function clampScale(value) {
+  return Math.min(Math.max(value, MIN_SCALE), MAX_SCALE);
+}
+
+function getTouchDistance(touches) {
+  const [a, b] = touches;
+  return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+}
+
 function ImageLightbox({ src, alt, onClose }) {
+  const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [isInteracting, setIsInteracting] = useState(false);
+
+  const pinchStartDistance = useRef(null);
+  const pinchStartScale = useRef(1);
+  const panStart = useRef(null);
+  const lastTapTime = useRef(0);
+
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     document.addEventListener("keydown", onKey);
@@ -71,6 +89,96 @@ function ImageLightbox({ src, alt, onClose }) {
     };
   }, [onClose]);
 
+  const resetView = () => {
+    setScale(1);
+    setTranslate({ x: 0, y: 0 });
+  };
+
+  const toggleZoom = (point) => {
+    setScale((current) => {
+      if (current > 1) {
+        setTranslate({ x: 0, y: 0 });
+        return 1;
+      }
+      if (point) {
+        setTranslate({
+          x:
+            ((0.5 * window.innerWidth - point.x) * (DOUBLE_TAP_SCALE - 1)) /
+            DOUBLE_TAP_SCALE,
+          y:
+            ((0.5 * window.innerHeight - point.y) * (DOUBLE_TAP_SCALE - 1)) /
+            DOUBLE_TAP_SCALE,
+        });
+      }
+      return DOUBLE_TAP_SCALE;
+    });
+  };
+
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      setIsInteracting(true);
+      pinchStartDistance.current = getTouchDistance(e.touches);
+      pinchStartScale.current = scale;
+      panStart.current = null;
+      return;
+    }
+    if (e.touches.length === 1) {
+      const now = Date.now();
+      const touch = e.touches[0];
+      if (now - lastTapTime.current < 280) {
+        toggleZoom({ x: touch.clientX, y: touch.clientY });
+        lastTapTime.current = 0;
+        return;
+      }
+      lastTapTime.current = now;
+      if (scale > 1) {
+        setIsInteracting(true);
+        panStart.current = {
+          x: touch.clientX - translate.x,
+          y: touch.clientY - translate.y,
+        };
+      }
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2 && pinchStartDistance.current) {
+      e.preventDefault();
+      const distance = getTouchDistance(e.touches);
+      const nextScale = clampScale(
+        pinchStartScale.current * (distance / pinchStartDistance.current),
+      );
+      setScale(nextScale);
+      return;
+    }
+    if (e.touches.length === 1 && panStart.current && scale > 1) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      setTranslate({
+        x: touch.clientX - panStart.current.x,
+        y: touch.clientY - panStart.current.y,
+      });
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (e.touches.length < 2) pinchStartDistance.current = null;
+    if (e.touches.length === 0) {
+      panStart.current = null;
+      setIsInteracting(false);
+      if (scale <= 1) setTranslate({ x: 0, y: 0 });
+    }
+  };
+
+  const handleWheel = (e) => {
+    e.preventDefault();
+    setScale((current) => clampScale(current - e.deltaY * 0.012));
+  };
+
+  const handleDoubleClick = (e) => {
+    toggleZoom({ x: e.clientX, y: e.clientY });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -80,16 +188,32 @@ function ImageLightbox({ src, alt, onClose }) {
       onClick={onClose}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-900/90 dark:bg-black/90 backdrop-blur-sm p-4 sm:p-8"
     >
-      <motion.img
+      <motion.div
         initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.97, opacity: 0 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        src={src}
-        alt={alt}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl select-none"
-      />
+        className="relative flex h-full w-full items-center justify-center overflow-hidden touch-none select-none"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        onDoubleClick={handleDoubleClick}
+      >
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          className="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl"
+          style={{
+            transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+            transition: isInteracting ? "none" : "transform 0.2s ease-out",
+            cursor: scale > 1 ? "grab" : "zoom-in",
+            touchAction: "none",
+          }}
+        />
+      </motion.div>
       <button
         type="button"
         onClick={onClose}
@@ -98,6 +222,18 @@ function ImageLightbox({ src, alt, onClose }) {
       >
         <X size={18} strokeWidth={2} />
       </button>
+      {scale > 1 && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            resetView();
+          }}
+          className={`absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full bg-stone-100 dark:bg-stone-800 px-4 py-2 text-xs font-medium text-stone-600 dark:text-stone-300 transition-[background-color,box-shadow,color] duration-300 ${RAISED} ${RAISED_HOVER} hover:text-emerald-700 dark:hover:text-emerald-400`}
+        >
+          Reset zoom
+        </button>
+      )}
     </motion.div>
   );
 }
@@ -106,6 +242,7 @@ export function FeatureCard({ feature, index }) {
   const { image, title, description } = feature;
   const isReversed = index % 2 === 1;
   const isMobile = useMediaQuery({ query: "(max-width: 1023px)" });
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const imageMotionProps = isMobile
     ? {
         initial: { opacity: 0, y: 28 },
@@ -147,8 +284,11 @@ export function FeatureCard({ feature, index }) {
         <div
           className={`group rounded-[24px] bg-stone-100 dark:bg-stone-800 p-2.5 sm:p-3 transition-[background-color,box-shadow] duration-500 ${RAISED}`}
         >
-          <div
-            className={`relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-stone-200/60 dark:bg-stone-900/60 transition-colors duration-300 ${INSET}`}
+          <button
+            type="button"
+            onClick={() => setIsLightboxOpen(true)}
+            aria-label={`Enlarge ${title} image`}
+            className={`relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-stone-200/60 dark:bg-stone-900/60 transition-colors duration-300 cursor-zoom-in ${INSET}`}
           >
             <img
               src={image}
@@ -156,7 +296,7 @@ export function FeatureCard({ feature, index }) {
               loading="lazy"
               className="h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
-          </div>
+          </button>
         </div>
       </motion.div>
       <motion.div
@@ -177,6 +317,15 @@ export function FeatureCard({ feature, index }) {
           {description}
         </p>
       </motion.div>
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <ImageLightbox
+            src={image}
+            alt={title}
+            onClose={() => setIsLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -317,7 +466,6 @@ export default function ProjectLayout({ project }) {
           </motion.div>
         </div>
 
-        {/* Tech Stack */}
         <div className="mt-20 sm:mt-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -352,7 +500,6 @@ export default function ProjectLayout({ project }) {
           </motion.div>
         </div>
 
-        {/* System Architecture */}
         <div className="mt-24 sm:mt-28 lg:mt-32">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -373,13 +520,6 @@ export default function ProjectLayout({ project }) {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
               <NeumorphicFrame className="max-w-5xl mx-auto">
-                {/*
-                  On small screens the diagram is rendered at a real,
-                  legible width (min-w-[640px]) and scrolls horizontally
-                  instead of being squashed to the viewport, which is what
-                  was destroying legibility before. Tapping it opens a
-                  fullscreen lightbox for a crisp, full-resolution view.
-                */}
                 <div className="relative w-full overflow-x-auto overflow-y-hidden rounded-3xl bg-stone-200/60 dark:bg-stone-900/60 [-webkit-overflow-scrolling:touch]">
                   <button
                     type="button"
@@ -399,7 +539,7 @@ export default function ProjectLayout({ project }) {
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full bg-stone-100 dark:bg-stone-800 px-3 py-1 text-[11px] font-medium text-stone-500 dark:text-stone-400 transition-colors duration-300 ${INSET_SM}`}
                   >
-                    Scroll or tap to zoom
+                    Tap to zoom
                   </span>
                 </div>
               </NeumorphicFrame>
@@ -411,7 +551,6 @@ export default function ProjectLayout({ project }) {
           </motion.div>
         </div>
 
-        {/* Key Features */}
         <div className="mt-24 sm:mt-28 lg:mt-32">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
