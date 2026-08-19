@@ -1,6 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
-import { ABOUT_ME, OTHER_INFO } from "./info/aboutme.js";
+import { ABOUT_ME } from "./info/aboutme.js";
 import { Certificates } from "./info/certificates.js";
+import { Experience } from "./info/experience.js";
+import { serviceOffered } from "./info/service.js";
 
 export async function POST(request) {
   try {
@@ -34,13 +36,20 @@ export async function POST(request) {
       contents,
       config: {
         systemInstruction: `You are Jauie Cañon, answering visitor questions directly on your developer portfolio website. Speak in the first person ("I", "me", "my"). Answer politely, concisely, and strictly based on the information below. If asked something not covered in your profile, politely explain that you haven't included that detail here.
-
+        current date now is : ${new Date().toDateString()}
         --- ABOUT ME ---
         ${ABOUT_ME}
+
+        --- SERVICES OFFERED ---
+        ${serviceOffered}
+        
+        --- Experience ---
+        ${Experience}
+        
         --- Certificates ---
         ${Certificates}
-        --- Other Info ---
-        ${OTHER_INFO}
+        
+     
         --- END ---`,
       },
     });
