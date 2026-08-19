@@ -20,7 +20,7 @@ const MESSAGE_DISPLAY_DURATION_MS = 6000; // Show message for 4 seconds
 const MESSAGE_INTERVAL_MS = 10000; // 10 seconds between messages
 
 const CARD =
-  "border border-stone-200 bg-white shadow-[2px_2px_5px_rgba(168,162,158,0.3),-2px_-2px_5px_rgba(255,255,255,0.8)] " +
+  "border border-stone-200 bg-white shadow-md " +
   "dark:border-stone-700 dark:bg-stone-800 dark:shadow-[2px_2px_5px_rgba(0,0,0,0.4),-2px_-2px_5px_rgba(87,83,78,0.25)]";
 const PANEL =
   "border border-stone-200 bg-white  " +
@@ -70,7 +70,7 @@ function Avatar({ src, size = "h-7 w-7" }) {
   const [broken, setBroken] = useState(false);
   return (
     <div
-      className={`flex ${size} pt-0.5 bg-gray-500 dark:bg-gray-700 shrink-0 items-center justify-center overflow-hidden rounded-full ${CARD}`}
+      className={`flex ${size} pt-0.5 bg-gray-500 dark:bg-gray-100 shrink-0 items-center justify-center overflow-hidden rounded-full `}
     >
       {!broken ? (
         <img
@@ -226,7 +226,7 @@ export default function Chatbot() {
     if (isOpenChatBox) return;
 
     const cycleMessages = () => {
-      const addedTimerNextMessage = isMobile ? 56000 : 6000;
+      const addedTimerNextMessage = isMobile ? 60000 : 15000;
       setShowMessage(true);
 
       // Hide message after display duration
@@ -317,7 +317,7 @@ export default function Chatbot() {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           aria-label={`Chat with ${PERSON_NAME}`}
-          className={`relative ml-auto flex sm:h-14 sm:w-15 h-10 w-12 items-center justify-center overflow-hidden rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 ${CARD}`}
+          className={`relative ml-auto flex sm:h-12 bg-stone-200 sm:w-15 h-10 w-12 items-center justify-center overflow-hidden rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 border-1 border-stone-200 shadow-[0_0_0_1px_rgba(0,0,0,0.05),0_8px_24px_rgba(0,0,0,0.20)]`}
         >
           {/* Pulse ring animation when message is showing */}
           {showMessage && (
@@ -330,9 +330,9 @@ export default function Chatbot() {
 
           {/* Three dots container */}
           <div className="flex items-center justify-center gap-1.5">
-            <span className="sm:h-2 sm:w-2 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
-            <span className="sm:h-2 sm:w-2 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
-            <span className="sm:h-2 sm:w-2 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+            <span className="sm:h-1.5 sm:w-1.5 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+            <span className="sm:h-1.5 sm:w-1.5 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+            <span className="sm:h-1.5 sm:w-1.5 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
           </div>
         </button>
       )}
