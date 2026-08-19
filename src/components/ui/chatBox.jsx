@@ -1,20 +1,30 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useChatbot } from "@/context/chatbotContext.jsx";
 import ReactMarkdown from "react-markdown";
+import { useMediaQuery } from "react-responsive";
 
 const FAB_AVATAR_SRC = "/fab-avatar.png";
-const CHAT_AVATAR_SRC = "/chat-avatar.png";
+const CHAT_AVATAR_SRC = "/aboutme/barong_tagalog_light.svg";
 const AVATAR_INITIALS = "JC";
 const PERSON_NAME = "Jauie Cañon";
+
+const TEASER_MESSAGES = [
+  " Got questions? I'm here to help!",
+  "👋 Hi there! Need any assistance?",
+  "🤔 Have a question? Let's chat!",
+  " I can answer your questions!",
+  " Feel free to ask me anything!",
+];
+
+const MESSAGE_DISPLAY_DURATION_MS = 6000; // Show message for 4 seconds
+const MESSAGE_INTERVAL_MS = 10000; // 10 seconds between messages
 
 const CARD =
   "border border-stone-200 bg-white shadow-[2px_2px_5px_rgba(168,162,158,0.3),-2px_-2px_5px_rgba(255,255,255,0.8)] " +
   "dark:border-stone-700 dark:bg-stone-800 dark:shadow-[2px_2px_5px_rgba(0,0,0,0.4),-2px_-2px_5px_rgba(87,83,78,0.25)]";
-
 const PANEL =
-  "border border-stone-200 bg-white shadow-[6px_6px_14px_rgba(168,162,158,0.3),-6px_-6px_14px_rgba(255,255,255,0.75)] " +
+  "border border-stone-200 bg-white  " +
   "dark:border-stone-800 dark:bg-stone-900 dark:shadow-[6px_6px_14px_rgba(0,0,0,0.45),-6px_-6px_14px_rgba(68,64,60,0.2)]";
-
 const FIELD =
   "border border-stone-200 bg-stone-50 shadow-[inset_2px_2px_4px_rgba(168,162,158,0.25),inset_-2px_-2px_4px_rgba(255,255,255,0.7)] " +
   "dark:border-stone-700 dark:bg-stone-900 dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,0.4),inset_-2px_-2px_4px_rgba(68,64,60,0.2)]";
@@ -58,16 +68,15 @@ const markdownComponents = {
 
 function Avatar({ src, size = "h-7 w-7" }) {
   const [broken, setBroken] = useState(false);
-
   return (
     <div
-      className={`flex ${size} shrink-0 items-center justify-center overflow-hidden rounded-full ${CARD}`}
+      className={`flex ${size} pt-0.5 bg-gray-500 dark:bg-gray-700 shrink-0 items-center justify-center overflow-hidden rounded-full ${CARD}`}
     >
       {!broken ? (
         <img
           src={src}
           alt={PERSON_NAME}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
           onError={() => setBroken(true)}
         />
       ) : (
@@ -91,12 +100,9 @@ function useReducedMotion() {
   return reduced;
 }
 
-// Reveals `text` progressively; total duration stays roughly constant
-// regardless of message length by scaling the chunk size per tick.
 function useTypewriter(text, { active, onTick, onDone }) {
   const [displayed, setDisplayed] = useState(active ? "" : text);
   const reducedMotion = useReducedMotion();
-
   useEffect(() => {
     if (!active || reducedMotion) {
       setDisplayed(text);
@@ -118,9 +124,7 @@ function useTypewriter(text, { active, onTick, onDone }) {
       }
     }, 16);
     return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text, active, reducedMotion]);
-
   return {
     displayed,
     isTyping: active && !reducedMotion && displayed.length < text.length,
@@ -133,7 +137,6 @@ function AssistantBubble({ text, animate, onTick, onDone }) {
     onTick,
     onDone,
   });
-
   return (
     <div
       className={`max-w-[80%] rounded-2xl rounded-bl-md px-4 py-2.5 text-sm ${CARD}`}
@@ -160,14 +163,48 @@ function WaitingIndicator() {
   );
 }
 
+// Rotating teaser message that appears above the FAB
+function RotatingTeaser({ message, visible, onOpen }) {
+  const reducedMotion = useReducedMotion();
+
+  if (!visible) return null;
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onOpen()}
+      className={`group relative mb-3 w-[15.5rem] max-w-[70vw] cursor-pointer text-left
+        ${reducedMotion ? "" : "animate-[teaser-pop_0.35s_ease-out]"}`}
+    >
+      <div
+        className={`flex  items-start gap-2.5 rounded-2xl rounded-br-md py-3 pl-5 pr-3 text-sm leading-snug text-stone-700 transition-transform group-hover:-translate-y-0.5 dark:text-stone-200 ${CARD}`}
+      >
+        <p className="pt-0.5 text-[13px]">{message}</p>
+      </div>
+
+      <span
+        aria-hidden="true"
+        className="absolute -bottom-1.5 right-6 h-3 w-3 rotate-45 border-b border-r border-stone-200 bg-white dark:border-stone-700 dark:bg-stone-800"
+      />
+    </div>
+  );
+}
+
 export default function Chatbot() {
   const { isOpenChatBox, toggleChatbox, messages, sendMessage, loading } =
     useChatbot();
   const [input, setInput] = useState("");
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [showMessage, setShowMessage] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
-
   const typedRef = useRef(new Set());
+  const messageIntervalRef = useRef(null);
+
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const scrollToBottom = (behavior = "smooth") => {
     messagesEndRef.current?.scrollIntoView({ behavior });
@@ -184,6 +221,60 @@ export default function Chatbot() {
     }
   }, [isOpenChatBox]);
 
+  // Rotating teaser messages logic
+  useEffect(() => {
+    if (isOpenChatBox) return;
+
+    const cycleMessages = () => {
+      const addedTimerNextMessage = isMobile ? 56000 : 6000;
+      setShowMessage(true);
+
+      // Hide message after display duration
+      const hideTimeout = setTimeout(() => {
+        setShowMessage(false);
+      }, MESSAGE_DISPLAY_DURATION_MS);
+
+      // Advance to next message after interval
+      const advanceTimeout = setTimeout(() => {
+        setCurrentMessageIndex((prev) => (prev + 1) % TEASER_MESSAGES.length);
+      }, MESSAGE_DISPLAY_DURATION_MS + addedTimerNextMessage);
+
+      return () => {
+        clearTimeout(hideTimeout);
+        clearTimeout(advanceTimeout);
+      };
+    };
+
+    // Start the cycle
+    const initialDelay = setTimeout(() => {
+      cycleMessages();
+
+      // Set up recurring interval
+      messageIntervalRef.current = setInterval(() => {
+        cycleMessages();
+      }, MESSAGE_INTERVAL_MS + MESSAGE_DISPLAY_DURATION_MS);
+    }, 2000);
+
+    return () => {
+      clearTimeout(initialDelay);
+      if (messageIntervalRef.current) {
+        clearInterval(messageIntervalRef.current);
+      }
+    };
+  }, [isOpenChatBox]);
+
+  // Clear interval when component unmounts or chat opens
+  useEffect(() => {
+    if (isOpenChatBox && messageIntervalRef.current) {
+      clearInterval(messageIntervalRef.current);
+      messageIntervalRef.current = null;
+    }
+  }, [isOpenChatBox]);
+
+  const openFromTeaser = () => {
+    toggleChatbox();
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
@@ -191,15 +282,58 @@ export default function Chatbot() {
     setInput("");
   };
 
+  const currentMessage = TEASER_MESSAGES[currentMessageIndex];
+
   return (
     <div className="fixed inset-x-3 bottom-3 z-50 flex flex-col items-end sm:inset-x-auto sm:right-6 sm:bottom-6">
+      <style>{`
+        @keyframes teaser-pop {
+          0% { opacity: 0; transform: translateY(8px) scale(0.96); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes fab-ring {
+          0% { transform: scale(1); opacity: 0.45; }
+          100% { transform: scale(1.6); opacity: 0; }
+        }
+        @keyframes pulse-dot {
+          0%, 100% { opacity: 0.3; transform: scale(0.8); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+      `}</style>
+
+      {!isOpenChatBox && showMessage && (
+        <RotatingTeaser
+          message={currentMessage}
+          visible={showMessage}
+          onOpen={openFromTeaser}
+        />
+      )}
+
       {!isOpenChatBox && (
         <button
-          onClick={toggleChatbox}
+          onClick={() => {
+            toggleChatbox();
+          }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           aria-label={`Chat with ${PERSON_NAME}`}
-          className={`ml-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-full transition-transform hover:scale-105 active:scale-95 ${CARD}`}
+          className={`relative ml-auto flex sm:h-14 sm:w-15 h-10 w-12 items-center justify-center overflow-hidden rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 ${CARD}`}
         >
-          <Avatar src={FAB_AVATAR_SRC} size="h-full w-full" />
+          {/* Pulse ring animation when message is showing */}
+          {showMessage && (
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 rounded-2xl bg-emerald-400/40"
+              style={{ animation: "fab-ring 1.8s ease-out infinite" }}
+            />
+          )}
+
+          {/* Three dots container */}
+          <div className="flex items-center justify-center gap-1.5">
+            <span className="sm:h-2 sm:w-2 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+            <span className="sm:h-2 sm:w-2 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+            <span className="sm:h-2 sm:w-2 h-1 w-1 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+          </div>
         </button>
       )}
 
@@ -249,7 +383,6 @@ export default function Chatbot() {
               </svg>
             </button>
           </div>
-
           {/* Messages */}
           <div
             className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
@@ -265,10 +398,8 @@ export default function Chatbot() {
                   </div>
                 );
               }
-
               const isLatest = index === messages.length - 1;
               const shouldAnimate = isLatest && !typedRef.current.has(index);
-
               return (
                 <div key={index} className="flex items-end justify-start gap-2">
                   <Avatar src={CHAT_AVATAR_SRC} />
@@ -284,7 +415,6 @@ export default function Chatbot() {
             {loading && <WaitingIndicator />}
             <div ref={messagesEndRef} />
           </div>
-
           {/* Input */}
           <form
             onSubmit={handleSubmit}

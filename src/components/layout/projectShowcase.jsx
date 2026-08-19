@@ -18,7 +18,7 @@ const defaultProjects = [
     description:
       "Streamlines logistics operations by combining order management, driver dispatch, and real-time tracking into a single, seamless platform.",
     tags: ["React", "TypeScript", "Tailwind", "Laravel", "MySQL", "Redis"],
-    liveUrl: "/projects/order-dispatch",
+    liveUrl: "/orderfulfillment-project",
   },
   {
     image: "/projects/pmms_img/main_pmms.svg",

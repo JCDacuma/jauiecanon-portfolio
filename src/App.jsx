@@ -3,6 +3,7 @@ import NavbarProvider from "@/context/navbarContext.jsx";
 
 import HomePage from "@/pages/home-page.jsx";
 import InventoryPosProjectPage from "@/pages/inventorypos-project.jsx";
+import OrderFulfillmentProjectPage from "@/pages/logistic-project-page.jsx";
 import ChatbotProvider from "@/context/chatbotContext.jsx";
 
 function App() {
@@ -14,6 +15,10 @@ function App() {
           <Route
             path="/inventorypos-project"
             element={<InventoryPosProjectPage />}
+          ></Route>
+          <Route
+            path="/orderfulfillment-project"
+            element={<OrderFulfillmentProjectPage />}
           ></Route>
         </Routes>
       </NavbarProvider>
