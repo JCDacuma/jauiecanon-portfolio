@@ -3,7 +3,7 @@ import ProjectLayout from "@/components/layout/project-layout.jsx";
 
 const PROJECT = {
   sectionId: "works",
-  title: "Order Fulfillment and Delivery Management System",
+  title: "Order and Delivery Management System (ODMS)",
   eyebrow: "Full-Stack Web Application",
   description:
     "A full-stack order fulfillment and delivery management platform developed for Koolwater, a mineral water refilling business. The system connects customer ordering, delivery scheduling, order fulfillment, dispatch, routing, inventory, fleet operations, and returnable container management into a centralized platform. It provides dedicated workflows for customers, administrators, and drivers, allowing each role to manage the parts of the delivery lifecycle relevant to them.",
@@ -54,64 +54,64 @@ const PROJECT = {
 
   features: [
     {
+      image: "/projects/logistics_img/OrderShop.svg",
       title: "Customer Ordering & Delivery Scheduling",
       description:
         "Allows customers to browse available products, place orders, select delivery schedules, monitor order status, and manage their delivery-related requests.",
     },
     {
+      image: "/projects/logistics_img/Manage_Order.svg",
       title: "Order Fulfillment Management",
       description:
         "Manages the order lifecycle from customer placement and confirmation through fulfillment, dispatch, delivery, and completion.",
     },
     {
+      image: "/projects/logistics_img/Manage_Delivery.svg",
       title: "Delivery Dispatch",
       description:
         "Allows administrators to organize delivery operations by assigning delivery tasks to available drivers and vehicles based on scheduled orders.",
     },
     {
+      image: "/projects/logistics_img/Driver Operations.svg",
       title: "Driver Operations",
       description:
         "Provides drivers with a dedicated interface for viewing assigned deliveries, managing delivery tasks, and updating delivery statuses while on the field.",
     },
     {
+      image: "/projects/logistics_img/ManageScopeRoutes.svg",
       title: "Route & Location Management",
       description:
         "Supports delivery planning and location-based operations using mapping and geolocation services to manage customer destinations and delivery routes.",
     },
     {
-      title: "Returnable Container Management",
-      description:
-        "Tracks reusable water containers throughout their operational lifecycle, including available, borrowed, returned, damaged, and other relevant statuses.",
-    },
-    {
+      image: "/projects/logistics_img/ReturnUI.svg",
       title: "Customer Borrowed Container Tracking",
       description:
         "Maintains records of containers currently borrowed by customers, including quantities and return status, helping the business monitor outstanding containers.",
     },
     {
+      image: "/projects/logistics_img/Return-Dispatch.svg",
       title: "Scheduled Returnable Pickups",
       description:
         "Allows returnable containers to be scheduled for pickup and included in driver operations alongside regular delivery activities.",
     },
     {
+      image: "/projects/logistics_img/Product-management.svg",
       title: "Inventory & Product Management",
       description:
         "Provides centralized management of products and stock to support accurate product availability and order fulfillment.",
     },
     {
+      image: "/projects/logistics_img/ManageVehicles.svg",
       title: "Vehicle & Driver Management",
       description:
         "Allows administrators to manage delivery drivers, vehicles, assignments, and operational availability.",
     },
     {
+      image: "/projects/logistics_img/different-payment.svg",
       title: "Online Payment Integration",
       description:
         "Integrates PayMongo to support online payment processing and payment-related order workflows.",
-    },
-    {
-      title: "Email Notifications",
-      description:
-        "Uses Brevo to deliver transactional notifications related to orders and other important system events.",
     },
   ],
 };

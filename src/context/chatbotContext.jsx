@@ -16,6 +16,7 @@ export default function ChatbotProvider({ children }) {
       text: "Hi! I'm Jauie 👋 Welcome to my portfolio! You can ask me anything about me, my projects, skills, experience, or background.",
     },
   ]);
+
   const [loading, setLoading] = useState(false);
 
   const toggleChatbox = () => setIsOpenChatBox((prev) => !prev);
@@ -27,7 +28,6 @@ export default function ChatbotProvider({ children }) {
 
     const trimmedMsg = userMessage.trim();
 
-    // Append user message locally
     const updatedMessages = [...messages, { role: "user", text: trimmedMsg }];
     setMessages(updatedMessages);
     setLoading(true);
@@ -36,7 +36,6 @@ export default function ChatbotProvider({ children }) {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Pass full history to enable multi-turn context
         body: JSON.stringify({ messages: updatedMessages }),
       });
 

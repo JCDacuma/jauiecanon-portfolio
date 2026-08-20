@@ -115,6 +115,7 @@ export default function ContactFooter({
     "flex h-11 w-11 items-center justify-center rounded-full border border-gray-700 bg-emerald-950 text-gray-300 shadow-[6px_6px_14px_rgba(0,0,0,0.5),-6px_-6px_14px_rgba(16,145,108,0.15)] transition-all duration-300 hover:border-emerald-400 hover:text-emerald-400 hover:shadow-[3px_3px_8px_rgba(0,0,0,0.5),-3px_-3px_8px_rgba(16,145,108,0.35)] active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.5),inset_-3px_-3px_6px_rgba(16,145,108,0.3)] motion-reduce:transition-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:shadow-[6px_6px_14px_rgba(0,0,0,0.65),-6px_-6px_14px_rgba(75,85,99,0.4)] dark:hover:border-emerald-400 dark:hover:text-emerald-400 dark:hover:shadow-[3px_3px_8px_rgba(0,0,0,0.65),-3px_-3px_8px_rgba(75,85,99,0.4)] dark:active:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.65),inset_-3px_-3px_6px_rgba(75,85,99,0.35)]";
   return (
     <motion.footer
+      id={"footer"}
       className="w-full bg-emerald-900 px-6 py-16 dark:bg-gray-900 sm:px-10 lg:px-16"
       variants={containerVariants}
       initial="hidden"

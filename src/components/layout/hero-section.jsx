@@ -3,14 +3,26 @@ import { useEffect, useRef, useState } from "react";
 import { Github, Linkedin, Mail, Download } from "lucide-react";
 import ParticlesBackground from "@/components/ui/particlesBackground";
 import TextAnimateShowing from "@/components/ui/textAnimateShowing.jsx";
+
+function scrollToFooter() {
+  const footer = document.getElementById("footer");
+  footer?.scrollIntoView({ behavior: "smooth" });
+}
+
 const accountLinks = [
-  { name: "Github", url: "https://github.com/jauiecanon", icon: Github },
+  {
+    name: "Github",
+    url: import.meta.env.VITE_GITHUB_URL,
+    icon: Github,
+    isFunction: false,
+  },
   {
     name: "Linkedin",
-    url: "https://linkedin.com/in/jauiecanon",
+    url: import.meta.env.VITE_LINKEDIN_URL,
     icon: Linkedin,
+    isFunction: false,
   },
-  { name: "Mail", url: "mailto:your-email@example.com", icon: Mail },
+  { name: "Mail", url: scrollToFooter, icon: Mail, isFunction: true }, // <-- no parens
 ];
 
 export default function HeroSection({ isDarkMode = false }) {
@@ -80,7 +92,6 @@ export default function HeroSection({ isDarkMode = false }) {
       `}
             />
 
-            {/* Dark mode image, absolutely stacked on top */}
             <img
               src="/aboutme/darkmode_barongtagalog.svg"
               alt="Hero"
@@ -129,17 +140,25 @@ export default function HeroSection({ isDarkMode = false }) {
             />
           </p>
           <div className="flex gap-4 mt-4.5 items-center">
-            {accountLinks.map((accountLink) => (
-              <a
-                key={accountLink.name}
-                href={accountLink.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-cyan-400 transition-colors"
-              >
-                <accountLink.icon />
-              </a>
-            ))}
+            {accountLinks.map((accountLink) =>
+              accountLink.isFunction ? (
+                <a
+                  key={accountLink.name}
+                  onClick={accountLink.url}
+                  className="hover:text-cyan-400 transition-colors"
+                >
+                  <accountLink.icon />
+                </a>
+              ) : (
+                <a
+                  key={accountLink.name}
+                  href={accountLink.url}
+                  target="_blank"
+                >
+                  <accountLink.icon />
+                </a>
+              ),
+            )}
             <span>|</span>
             <button className="flex text-sm items-center gap-2 border border-solid border-white rounded-full px-3 py-1 hover:bg-white/10 transition-colors">
               <Download size={14} />
