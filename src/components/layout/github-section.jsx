@@ -1,54 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { GitHubCalendar } from "react-github-calendar";
 import { useNavbar } from "@/context/navbarContext.jsx";
 
-/* ------------------------------------------------------------------ */
-/*  Neumorphic shadow tokens (shared design language)                 */
-/* ------------------------------------------------------------------ */
 const RAISED =
-  "shadow-[6px_6px_14px_rgba(168,162,158,0.35),-6px_-6px_14px_rgba(255,255,255,0.85)] " +
-  "dark:shadow-[6px_6px_16px_rgba(0,0,0,0.55),-6px_-6px_16px_rgba(255,255,255,0.025)]";
+  "shadow-[4px_4px_10px_rgba(168,162,158,0.25),-4px_-4px_10px_rgba(255,255,255,0.7)] " +
+  "dark:shadow-[4px_4px_12px_rgba(0,0,0,0.4),-4px_-4px_12px_rgba(255,255,255,0.02)]";
 const INSET =
-  "shadow-[inset_3px_3px_7px_rgba(168,162,158,0.4),inset_-3px_-3px_7px_rgba(255,255,255,0.85)] " +
-  "dark:shadow-[inset_3px_3px_7px_rgba(0,0,0,0.55),inset_-3px_-3px_7px_rgba(255,255,255,0.025)]";
-const INSET_SM =
-  "shadow-[inset_2px_2px_5px_rgba(168,162,158,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.85)] " +
-  "dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.55),inset_-2px_-2px_5px_rgba(255,255,255,0.025)]";
+  "shadow-[inset_2px_2px_5px_rgba(168,162,158,0.3),inset_-2px_-2px_5px_rgba(255,255,255,0.7)] " +
+  "dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.4),inset_-2px_-2px_5px_rgba(255,255,255,0.02)]";
 
 const EASE = [0.16, 1, 0.3, 1];
 
-const headerVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.55, ease: EASE },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 28, scale: 0.96 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.55, ease: EASE },
-  },
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
 };
 
 const calendarTheme = {
-  light: ["#e7e5e0", "#a7f3d0", "#5eead4", "#2dd4bf", "#059669"],
-  dark: ["#292825", "#065f46", "#0d9488", "#10b981", "#6ee7b7"],
+  light: ["#ece9e4", "#a7f3d0", "#5eead4", "#2dd4bf", "#059669"],
+  dark: ["#26251f", "#065f46", "#0d9488", "#10b981", "#6ee7b7"],
 };
 
 const STATS_HOST =
   "https://github-readme-stats-alpha-one-jaez1sfjbr.vercel.app/api/top-langs/";
 const STREAK_HOST = "https://github-streak-theta.vercel.app";
-
-// External stat services (esp. free-tier vercel deploys) can take a while
-// to cold-start, so give them a generous window before treating it as an error.
 const LOAD_TIMEOUT_MS = 20000;
 
 function buildTopLangsUrl(username, isDarkMode) {
@@ -92,6 +68,34 @@ function buildStreakUrl(username, isDarkMode) {
   return `${STREAK_HOST}?${params.toString()}`;
 }
 
+function CardShell({ children, className = "", centerContent = false }) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+      className={`rounded-3xl bg-stone-100 dark:bg-stone-800 p-3 sm:p-4 transition-colors duration-300 ${RAISED} ${className}`}
+    >
+      <div
+        className={`rounded-2xl p-4 sm:p-5 h-full ${INSET} ${
+          centerContent ? "flex flex-col justify-center" : ""
+        }`}
+      >
+        {children}
+      </div>
+    </motion.div>
+  );
+}
+
+function SectionLabel({ children }) {
+  return (
+    <h3 className="text-xs font-medium tracking-wide text-stone-500 dark:text-stone-400 uppercase mb-4">
+      {children}
+    </h3>
+  );
+}
+
 function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
   const [status, setStatus] = useState("loading");
   const [attempt, setAttempt] = useState(0);
@@ -110,29 +114,23 @@ function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
   };
 
   return (
-    <div
-      className={`rounded-2xl w-full bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-colors duration-300 min-h-[120px] max-h-120 ${INSET} ${
-        centered ? "flex flex-col items-center text-center" : ""
-      }`}
-    >
-      <h3 className="text-sm font-semibold tracking-wide text-stone-700 dark:text-stone-300 uppercase mb-4 transition-colors duration-300">
-        {title}
-      </h3>
+    <div className={centered ? "flex flex-col items-center text-center" : ""}>
+      <SectionLabel>{title}</SectionLabel>
 
       {status === "loading" && (
-        <div className="flex items-center w-full gap-2.5 py-6 text-sm text-stone-500 dark:text-stone-400">
-          <span className="w-3.5 h-3.5 rounded-full border-2 border-emerald-500/30 dark:border-emerald-400/30 border-t-emerald-600 dark:border-t-emerald-400 animate-spin" />
-          Fetching data...
+        <div className="flex items-center gap-2 py-6 text-sm text-stone-400 dark:text-stone-500">
+          <span className="w-3.5 h-3.5 rounded-full border-2 border-emerald-500/30 border-t-emerald-600 dark:border-t-emerald-400 animate-spin" />
+          Fetching data…
         </div>
       )}
 
       {status === "error" && (
-        <p className="text-sm text-stone-500 dark:text-stone-400 py-2">
+        <p className="text-sm text-stone-400 dark:text-stone-500 py-2">
           Couldn't load stats.{" "}
           <button
             type="button"
             onClick={handleRetry}
-            className="underline hover:text-emerald-600 dark:hover:text-emerald-400"
+            className="underline underline-offset-2 hover:text-emerald-600 dark:hover:text-emerald-400"
           >
             Retry
           </button>{" "}
@@ -141,119 +139,107 @@ function StatImageCard({ title, src, alt, fallbackHref, centered = false }) {
             href={fallbackHref}
             target="_blank"
             rel="noreferrer"
-            className="underline hover:text-emerald-600 dark:hover:text-emerald-400"
+            className="underline underline-offset-2 hover:text-emerald-600 dark:hover:text-emerald-400"
           >
             open directly
           </a>
-          .
         </p>
       )}
 
-      <img
-        key={`${src}-${attempt}`}
-        src={src}
-        alt={alt}
-        onLoad={() => setStatus("loaded")}
-        onError={() => setStatus("error")}
-        className={`w-full h-30 transition-opacity duration-300 ${
-          centered ? "mx-auto" : ""
-        } ${
-          status === "loaded"
-            ? "opacity-100"
-            : "opacity-0 absolute pointer-events-none -z-10"
-        }`}
-      />
+      {status !== "error" && (
+        <img
+          key={`${src}-${attempt}`}
+          src={src}
+          alt={alt}
+          onLoad={() => setStatus("loaded")}
+          onError={() => setStatus("error")}
+          className={`w-full transition-opacity duration-300 ${
+            centered ? "mx-auto" : ""
+          } ${status === "loaded" ? "opacity-100" : "opacity-0 h-0"}`}
+        />
+      )}
     </div>
   );
 }
 
 export default function GitHubSection({ username }) {
   const { isDarkMode } = useNavbar();
+  const calendarScrollRef = useRef(null);
+  const [calendarReady, setCalendarReady] = useState(false);
+
+  useLayoutEffect(() => {
+    const node = calendarScrollRef.current;
+    if (!node) return;
+
+    const scrollToLatest = () => {
+      node.scrollLeft = node.scrollWidth;
+    };
+
+    scrollToLatest();
+    setCalendarReady(true);
+
+    const observer = new ResizeObserver(scrollToLatest);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [username]);
 
   return (
     <section
       id="github"
-      className="relative flex flex-col items-center pt-15 pb-16  overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
+      className="relative flex flex-col items-center py-20 bg-stone-50 dark:bg-stone-800 transition-colors duration-500"
     >
-      <div className="w-full mx-auto max-w-7xl px-4 sm:px-6">
+      <div className="w-full mx-auto max-w-5xl px-4 sm:px-6">
         <motion.div
-          variants={headerVariants}
+          variants={fadeUp}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.4 }}
-          className="text-center mb-10 pt-5 sm:mb-12 will-change-transform"
+          viewport={{ once: true, amount: 0.4 }}
+          className="text-center mb-12"
         >
-          <span className="inline-block text-xs sm:text-sm font-semibold tracking-widest text-emerald-700 dark:text-emerald-400 uppercase mb-4 transition-colors duration-300">
+          <span className="text-xs font-medium tracking-widest text-emerald-600 dark:text-emerald-400 uppercase">
             Consistency Builds Progress
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50 transition-colors duration-300">
-            My{" "}
-            <span className="bg-gradient-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300 bg-clip-text text-transparent">
-              GitHub
-            </span>{" "}
-            Activity
+          <h2 className="mt-3 text-2xl sm:text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
+            My GitHub Activity
           </h2>
-          <div className="mt-5 mx-auto mr-[50%] w-16 h-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300" />
+          <div className="mt-4 mx-auto w-10 h-1 rounded-full bg-emerald-500 dark:bg-emerald-400" />
         </motion.div>
 
-        <div className="flex flex-col gap-5 sm:gap-6">
-          {/* Contribution Activity */}
-          <motion.div
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-            className={`rounded-[26px] bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-[background-color,box-shadow] duration-500 will-change-transform ${RAISED}`}
-          >
+        <div className="flex flex-col gap-4 sm:gap-5">
+          <CardShell>
+            <SectionLabel>Contribution Activity</SectionLabel>
             <div
-              className={`rounded-2xl bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-colors duration-300 ${INSET}`}
+              ref={calendarScrollRef}
+              className={`overflow-x-auto -mx-1 px-1 transition-opacity duration-200 ${
+                calendarReady ? "opacity-100" : "opacity-0"
+              }`}
             >
-              <h3 className="text-sm font-semibold tracking-wide text-stone-700 dark:text-stone-300 uppercase mb-4 transition-colors duration-300">
-                Contribution Activity
-              </h3>
-              <div className="overflow-x-auto -mx-1 px-1">
-                <div className="min-w-[640px]">
-                  <GitHubCalendar
-                    username={username}
-                    colorScheme={isDarkMode ? "dark" : "light"}
-                    theme={calendarTheme}
-                    blockSize={11}
-                    blockMargin={4}
-                    fontSize={12}
-                    showTotalCount
-                    showWeekdayLabels
-                  />
-                </div>
+              <div className="min-w-[640px]">
+                <GitHubCalendar
+                  username={username}
+                  colorScheme={isDarkMode ? "dark" : "light"}
+                  theme={calendarTheme}
+                  blockSize={11}
+                  blockMargin={4}
+                  fontSize={12}
+                  showTotalCount
+                  showWeekdayLabels
+                />
               </div>
             </div>
-          </motion.div>
+          </CardShell>
 
-          {/* Top Languages + GitHub Streak, side by side */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-            <motion.div
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ delay: 0.1 }}
-              className={`rounded-[26px] bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-[background-color,box-shadow] duration-500 relative will-change-transform ${RAISED}`}
-            >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 items-stretch">
+            <CardShell>
               <StatImageCard
                 title="Top Languages"
                 src={buildTopLangsUrl(username, isDarkMode)}
                 alt={`${username}'s most used languages`}
                 fallbackHref={buildTopLangsUrl(username, isDarkMode)}
               />
-            </motion.div>
+            </CardShell>
 
-            <motion.div
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ delay: 0.18 }}
-              className={`rounded-[26px] items-center flex bg-stone-100 dark:bg-stone-800 p-4 sm:p-5 transition-[background-color,box-shadow] duration-500 relative will-change-transform ${RAISED}`}
-            >
+            <CardShell centerContent>
               <StatImageCard
                 title="GitHub Streak"
                 src={buildStreakUrl(username, isDarkMode)}
@@ -261,7 +247,7 @@ export default function GitHubSection({ username }) {
                 fallbackHref="https://git.io/streak-stats"
                 centered
               />
-            </motion.div>
+            </CardShell>
           </div>
         </div>
       </div>

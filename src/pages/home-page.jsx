@@ -16,6 +16,7 @@ import ServicesSection from "@/components/layout/services-section.jsx";
 import GitHubContributions from "@/components/layout/github-section.jsx";
 import ProjectShowcase from "@/components/layout/projectShowcase.jsx";
 import CertificateSection from "@/components/layout/certificate-section.jsx";
+import Footer from "@/components/layout/footer.jsx";
 
 export default function HomePage() {
   const [activeSection, setActiveSection] = useState("home");
@@ -56,13 +57,7 @@ export default function HomePage() {
       <CertificateSection />
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-gray-400">
-            © 2024 Jauie Cañon. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

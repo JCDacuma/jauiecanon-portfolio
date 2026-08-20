@@ -1,24 +1,20 @@
 import { motion } from "framer-motion";
 
-// Same restrained soft-UI tokens as ServicesSection — two-tone shadow (soft
-// dark side + soft light side), kept low-opacity and tight so it reads as a
-// gentle lift rather than a heavy skeuomorphic surface. Scaled up slightly
-// here since these frames are much larger than an icon badge.
 const RAISED_MD =
-  "shadow-[6px_6px_14px_rgba(168,162,158,0.4),-6px_-6px_14px_rgba(255,255,255,0.8)] " +
-  "dark:shadow-[6px_6px_16px_rgba(0,0,0,0.5),-6px_-6px_16px_rgba(255,255,255,0.025)]";
+  "shadow-[6px_6px_14px_rgba(168,162,158,0.4)] " +
+  "dark:shadow-[6px_6px_16px_rgba(0,0,0,0.5)]";
 const RAISED_MD_HOVER =
-  "hover:shadow-[3px_3px_8px_rgba(168,162,158,0.3),-3px_-3px_8px_rgba(255,255,255,0.8)] " +
-  "dark:hover:shadow-[3px_3px_10px_rgba(0,0,0,0.5),-3px_-3px_10px_rgba(255,255,255,0.025)]";
+  "hover:shadow-[3px_3px_8px_rgba(168,162,158,0.3)] " +
+  "dark:hover:shadow-[3px_3px_10px_rgba(0,0,0,0.5)]";
 const RAISED_SM =
-  "shadow-[4px_4px_10px_rgba(168,162,158,0.4),-4px_-4px_10px_rgba(255,255,255,0.8)] " +
-  "dark:shadow-[4px_4px_12px_rgba(0,0,0,0.5),-4px_-4px_12px_rgba(255,255,255,0.025)]";
+  "shadow-[4px_4px_10px_rgba(168,162,158,0.4)] " +
+  "dark:shadow-[4px_4px_12px_rgba(0,0,0,0.5)]";
 const RAISED_SM_HOVER =
-  "hover:shadow-[2px_2px_6px_rgba(168,162,158,0.3),-2px_-2px_6px_rgba(255,255,255,0.8)] " +
-  "dark:hover:shadow-[2px_2px_7px_rgba(0,0,0,0.5),-2px_-2px_7px_rgba(255,255,255,0.025)]";
+  "hover:shadow-[2px_2px_6px_rgba(168,162,158,0.3)] " +
+  "dark:hover:shadow-[2px_2px_7px_rgba(0,0,0,0.5)]";
 const INSET_XS =
-  "shadow-[inset_2px_2px_5px_rgba(168,162,158,0.35),inset_-2px_-2px_5px_rgba(255,255,255,0.8)] " +
-  "dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.025)]";
+  "shadow-[inset_2px_2px_5px_rgba(168,162,158,0.35)] " +
+  "dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5)]";
 
 export default function AboutMeSection() {
   const calculateAge = (birthDateString) => {

@@ -8,7 +8,6 @@ import {
   X,
   ZoomIn,
 } from "lucide-react";
-
 /* ------------------------------------------------------------------ */
 /*  Default data — swap with real certificates                        */
 /* ------------------------------------------------------------------ */
@@ -59,7 +58,6 @@ const defaultCertificates = [
     credentialUrl: "#",
   },
 ];
-
 /* ------------------------------------------------------------------ */
 /*  Neumorphic shadow tokens — same language as the rest of the site  */
 /* ------------------------------------------------------------------ */
@@ -84,7 +82,6 @@ const INSET_SM =
 const INSET_XS =
   "shadow-[inset_1.5px_1.5px_4px_rgba(168,162,158,0.35),inset_-1.5px_-1.5px_4px_rgba(255,255,255,0.8)] " +
   "dark:shadow-[inset_1.5px_1.5px_4px_rgba(0,0,0,0.5),inset_-1.5px_-1.5px_4px_rgba(255,255,255,0.02)]";
-
 /* ------------------------------------------------------------------ */
 /*  Responsive "cards per page" — mirrors the Tailwind breakpoints    */
 /*  used on the page grid below (sm:640 / lg:1024 / xl:1280), so the  */
@@ -98,7 +95,6 @@ function getPerView() {
   if (w >= 640) return 2;
   return 1;
 }
-
 function usePerView() {
   const [perView, setPerView] = useState(getPerView);
   useEffect(() => {
@@ -108,7 +104,6 @@ function usePerView() {
   }, []);
   return perView;
 }
-
 function chunk(list, size) {
   const pages = [];
   for (let i = 0; i < list.length; i += size) {
@@ -116,13 +111,11 @@ function chunk(list, size) {
   }
   return pages;
 }
-
 /* ------------------------------------------------------------------ */
 /*  Single certificate card                                           */
 /* ------------------------------------------------------------------ */
 function CertificateCard({ cert, index, total, onView }) {
   const { image, title, issuer, date, description, credentialUrl } = cert;
-
   return (
     <div
       role="group"
@@ -149,14 +142,12 @@ function CertificateCard({ cert, index, total, onView }) {
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-stone-950/35 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
         {/* Zoom hint, appears on hover/focus */}
         <span className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <span className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-50/90 dark:bg-stone-800/90 text-stone-700 dark:text-stone-200 backdrop-blur-sm">
             <ZoomIn size={18} strokeWidth={2} />
           </span>
         </span>
-
         {/* Badge icon, floating on the image corner */}
         <span
           className={`absolute top-3 left-3 flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 dark:bg-stone-800 text-emerald-700 dark:text-emerald-400 transition-colors duration-300 ${RAISED_SM}`}
@@ -164,23 +155,19 @@ function CertificateCard({ cert, index, total, onView }) {
           <Award size={16} strokeWidth={2} />
         </span>
       </button>
-
       {/* Content */}
       <div className="flex flex-1 flex-col gap-2.5 p-4 sm:p-5">
         <h3 className="text-base sm:text-lg font-semibold text-stone-900 dark:text-stone-50 tracking-tight leading-snug transition-colors duration-300">
           {title}
         </h3>
-
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-emerald-700 dark:text-emerald-400 transition-colors duration-300">
           <span>{issuer}</span>
           <span className="text-stone-300 dark:text-stone-600">•</span>
           <span className="text-stone-500 dark:text-stone-400">{date}</span>
         </div>
-
         <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 leading-relaxed transition-colors duration-300">
           {description}
         </p>
-
         {credentialUrl && (
           <a
             href={credentialUrl}
@@ -209,10 +196,6 @@ function CertificateCard({ cert, index, total, onView }) {
     </div>
   );
 }
-
-/* ------------------------------------------------------------------ */
-/*  Lightbox — full-size certificate image on tap                     */
-/* ------------------------------------------------------------------ */
 function CertificateLightbox({ cert, onClose }) {
   useEffect(() => {
     if (!cert) return;
@@ -227,7 +210,6 @@ function CertificateLightbox({ cert, onClose }) {
       document.body.style.overflow = prevOverflow;
     };
   }, [cert, onClose]);
-
   return (
     <AnimatePresence>
       {cert && (
@@ -255,7 +237,6 @@ function CertificateLightbox({ cert, onClose }) {
             >
               <X size={16} strokeWidth={2.25} />
             </button>
-
             <div
               className={`rounded-[26px] bg-stone-100 dark:bg-stone-800 p-2.5 sm:p-3 transition-colors duration-500 ${RAISED}`}
             >
@@ -287,10 +268,6 @@ function CertificateLightbox({ cert, onClose }) {
     </AnimatePresence>
   );
 }
-
-/* ------------------------------------------------------------------ */
-/*  Carousel                                                          */
-/* ------------------------------------------------------------------ */
 export default function CertificateSection({
   certificates = defaultCertificates,
 }) {
@@ -302,12 +279,10 @@ export default function CertificateSection({
     [certificates, perView],
   );
   const pageCount = pages.length;
-
   const [activePage, setActivePage] = useState(0);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(pageCount > 1);
   const [lightboxCert, setLightboxCert] = useState(null);
-
   const scrollToPage = useCallback((index) => {
     const track = trackRef.current;
     const page = pageRefs.current[index];
@@ -317,10 +292,6 @@ export default function CertificateSection({
       behavior: "smooth",
     });
   }, []);
-
-  // When the number of cards-per-page changes (breakpoint crossed), the
-  // pages are re-chunked, so snap back to a sane starting position instead
-  // of sitting at a scroll offset that no longer lines up with any page.
   useEffect(() => {
     const track = trackRef.current;
     if (track) track.scrollTo({ left: 0, behavior: "auto" });
@@ -328,23 +299,16 @@ export default function CertificateSection({
     setCanScrollPrev(false);
     setCanScrollNext(pageCount > 1);
   }, [perView, pageCount]);
-
   const goPrev = useCallback(() => {
     scrollToPage(Math.max(0, activePage - 1));
   }, [activePage, scrollToPage]);
-
   const goNext = useCallback(() => {
     scrollToPage(Math.min(pageCount - 1, activePage + 1));
   }, [activePage, pageCount, scrollToPage]);
-
-  // Track scroll position to know which *page* is active — each page is a
-  // full-width block, so this reflects exactly what set of cards is on
-  // screen, and the dots always line up with what the person actually sees.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
     let raf = null;
-
     const handleScroll = () => {
       if (raf) cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
@@ -364,7 +328,6 @@ export default function CertificateSection({
         setCanScrollNext(trackLeft < track.scrollWidth - track.clientWidth - 8);
       });
     };
-
     handleScroll();
     track.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
@@ -372,11 +335,7 @@ export default function CertificateSection({
       if (raf) cancelAnimationFrame(raf);
     };
   }, [pages]);
-
-  // Pointer-drag-to-scroll so desktop mouse users get a real "carousel"
-  // grab feel too, not just the buttons. Touch keeps native momentum scroll.
   const drag = useRef({ active: false, startX: 0, startScroll: 0 });
-
   const onPointerDown = useCallback((e) => {
     if (e.pointerType === "touch") return;
     const track = trackRef.current;
@@ -389,7 +348,6 @@ export default function CertificateSection({
     track.setPointerCapture(e.pointerId);
     track.classList.add("cursor-grabbing");
   }, []);
-
   const onPointerMove = useCallback((e) => {
     if (!drag.current.active) return;
     const track = trackRef.current;
@@ -397,7 +355,6 @@ export default function CertificateSection({
     track.scrollLeft =
       drag.current.startScroll - (e.clientX - drag.current.startX);
   }, []);
-
   const onPointerUp = useCallback((e) => {
     const track = trackRef.current;
     drag.current.active = false;
@@ -408,17 +365,15 @@ export default function CertificateSection({
       } catch {}
     }
   }, []);
-
   return (
     <section
       id="certification"
-      className="relative flex flex-col items-center py-20 sm:py-24 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
+      className="relative flex flex-col items-center py-20 sm:py-24 overflow-hidden bg-stone-50 dark:bg-stone-800 transition-colors duration-500"
     >
       <style>{`
         .cert-track::-webkit-scrollbar { display: none; }
         .cert-track { scrollbar-width: none; -ms-overflow-style: none; }
       `}</style>
-
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -447,80 +402,90 @@ export default function CertificateSection({
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
           className="relative mt-14 sm:mt-16 w-full"
         >
-          {/* Prev / Next — desktop only; mobile relies on swipe + dots */}
-          <button
-            type="button"
-            onClick={goPrev}
-            disabled={!canScrollPrev}
-            aria-label="Previous certificates"
-            className={`
-              hidden md:flex absolute left-0 top-[38%] -translate-y-1/2 -translate-x-5 z-10
-              h-11 w-11 items-center justify-center rounded-full
-              bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-300
-              transition-[box-shadow,opacity,color] duration-300
-              disabled:opacity-0 disabled:pointer-events-none
-              hover:text-emerald-700 dark:hover:text-emerald-400
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600
-              ${RAISED_SM} ${RAISED_SM_HOVER}
-            `}
-          >
-            <ChevronLeft size={18} strokeWidth={2.25} />
-          </button>
-          <button
-            type="button"
-            onClick={goNext}
-            disabled={!canScrollNext}
-            aria-label="Next certificates"
-            className={`
-              hidden md:flex absolute right-0 top-[38%] -translate-y-1/2 translate-x-5 z-10
-              h-11 w-11 items-center justify-center rounded-full
-              bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-300
-              transition-[box-shadow,opacity,color] duration-300
-              disabled:opacity-0 disabled:pointer-events-none
-              hover:text-emerald-700 dark:hover:text-emerald-400
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600
-              ${RAISED_SM} ${RAISED_SM_HOVER}
-            `}
-          >
-            <ChevronRight size={18} strokeWidth={2.25} />
-          </button>
+          <div className="relative md:px-14 lg:px-16">
+            <button
+              type="button"
+              onClick={goPrev}
+              disabled={!canScrollPrev}
+              aria-label="Previous certificates"
+              className={`
+                hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10
+                h-11 w-11 items-center justify-center rounded-full
+                bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-300
+                transition-[box-shadow,opacity,color] duration-300
+                disabled:opacity-0 disabled:pointer-events-none
+                hover:text-emerald-700 dark:hover:text-emerald-400
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600
+                ${RAISED_SM} ${RAISED_SM_HOVER}
+              `}
+            >
+              <ChevronLeft size={18} strokeWidth={2.25} />
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              disabled={!canScrollNext}
+              aria-label="Next certificates"
+              className={`
+                hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10
+                h-11 w-11 items-center justify-center rounded-full
+                bg-stone-50 dark:bg-stone-900 text-stone-600 dark:text-stone-300
+                transition-[box-shadow,opacity,color] duration-300
+                disabled:opacity-0 disabled:pointer-events-none
+                hover:text-emerald-700 dark:hover:text-emerald-400
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600
+                ${RAISED_SM} ${RAISED_SM_HOVER}
+              `}
+            >
+              <ChevronRight size={18} strokeWidth={2.25} />
+            </button>
 
-          <div
-            ref={trackRef}
-            role="region"
-            aria-roledescription="carousel"
-            aria-label="Certificates"
-            tabIndex={0}
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerLeave={onPointerUp}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowRight") goNext();
-              if (e.key === "ArrowLeft") goPrev();
-            }}
-            className="cert-track flex overflow-x-auto snap-x snap-mandatory scroll-smooth cursor-grab select-none focus-visible:outline-none rounded-3xl"
-          >
-            {pages.map((pageCerts, pageIndex) => (
-              <div
-                key={pageIndex}
-                ref={(el) => (pageRefs.current[pageIndex] = el)}
-                className="grid w-full shrink-0 snap-start grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 px-1"
-              >
-                {pageCerts.map((cert, i) => {
-                  const globalIndex = pageIndex * perView + i;
-                  return (
-                    <CertificateCard
-                      key={cert.title}
-                      cert={cert}
-                      index={globalIndex}
-                      total={certificates.length}
-                      onView={setLightboxCert}
-                    />
-                  );
-                })}
-              </div>
-            ))}
+            {/*
+              FIX 1 — cut-off top/bottom:
+              overflow-x-auto on this track implicitly makes overflow-y
+              "auto" too (per the CSS spec, you can't have overflow-x set
+              and overflow-y stay "visible"), so the neumorphic drop-shadow
+              on each card was being clipped top and bottom. Adding
+              vertical padding (py-4 sm:py-5) gives the shadow room to
+              breathe inside the scroll container instead of being sliced.
+            */}
+            <div
+              ref={trackRef}
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Certificates"
+              tabIndex={0}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerLeave={onPointerUp}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowRight") goNext();
+                if (e.key === "ArrowLeft") goPrev();
+              }}
+              className="cert-track flex overflow-x-auto snap-x snap-mandatory scroll-smooth cursor-grab select-none focus-visible:outline-none rounded-3xl py-4 sm:py-5 -my-4 sm:-my-5"
+            >
+              {pages.map((pageCerts, pageIndex) => (
+                <div
+                  key={pageIndex}
+                  ref={(el) => (pageRefs.current[pageIndex] = el)}
+                  className="grid w-full shrink-0 snap-start grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6 px-1"
+                >
+                  {pageCerts.map((cert, i) => {
+                    const globalIndex = pageIndex * perView + i;
+                    return (
+                      <CertificateCard
+                        key={cert.title}
+                        cert={cert}
+                        index={globalIndex}
+                        total={certificates.length}
+                        onView={setLightboxCert}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Dots — one per page, matching exactly what's on screen */}
@@ -549,7 +514,6 @@ export default function CertificateSection({
           )}
         </motion.div>
       </div>
-
       <CertificateLightbox
         cert={lightboxCert}
         onClose={() => setLightboxCert(null)}

@@ -183,7 +183,7 @@ export default function ProjectShowcase({ projects = defaultProjects }) {
   return (
     <section
       id="works"
-      className="relative flex flex-col items-center pt-15 pb-24 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
+      className="relative flex flex-col items-center pt-15 pb-24 overflow-hidden bg-stone-50 dark:bg-stone-800 transition-colors duration-500"
     >
       <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
         <motion.div

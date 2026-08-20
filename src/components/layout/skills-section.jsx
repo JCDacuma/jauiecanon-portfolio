@@ -22,15 +22,15 @@ const INSET_SM =
 const CATEGORY_STYLES = {
   Frontend: {
     icon: Code2,
-    chipText: "text-violet-600 dark:text-violet-400",
-    tagText: "text-violet-700 dark:text-violet-300",
-    dotIdle: "bg-violet-500 dark:bg-violet-400",
+    chipText: "text-cyan-600 dark:text-cyan-400",
+    tagText: "text-cyan-700 dark:text-cyan-300",
+    dotIdle: "bg-cyan-500 dark:bg-cyan-400",
   },
   Backend: {
     icon: Server,
-    chipText: "text-amber-600 dark:text-amber-400",
-    tagText: "text-amber-700 dark:text-amber-300",
-    dotIdle: "bg-amber-500 dark:bg-amber-400",
+    chipText: "text-cyan-600 dark:text-cyan-400",
+    tagText: "text-cyan-700 dark:text-cyan-300",
+    dotIdle: "bg-cyan-500 dark:bg-cyan-400",
   },
   Database: {
     icon: Database,
@@ -107,8 +107,16 @@ const skillsLogos = [
     alt: "JavaScript",
   },
   {
+    src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
+    alt: "NextJs",
+  },
+  {
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
     alt: "Tailwind CSS",
+  },
+  {
+    src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
+    alt: "Bootstrap",
   },
   {
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg",
@@ -117,6 +125,10 @@ const skillsLogos = [
   {
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg",
     alt: "Laravel",
+  },
+  {
+    src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    alt: "Python",
   },
   {
     src: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
@@ -249,7 +261,7 @@ export default function SkillsSection() {
   return (
     <section
       id="skills"
-      className="relative flex flex-col items-center mt-5 pb-5 pt-10 overflow-hidden bg-stone-50 dark:bg-stone-900 transition-colors duration-500"
+      className="relative flex flex-col items-center mt-5 pb-5 pt-10 overflow-hidden bg-stone-50 dark:bg-stone-800 transition-colors duration-500"
     >
       <div className="w-full mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
@@ -269,13 +281,13 @@ export default function SkillsSection() {
           </h2>
           <div className="mt-5 hidden lg:flex w-16 h-1.5 mx-auto mr-[47.55%] rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300" />
 
-          <div className="relative mt-10 py-4 rounded-2xl bg-stone-50 dark:bg-stone-900 overflow-hidden transition-colors duration-300">
+          <div className="relative mt-10 py-4 rounded-2xl bg-stone-50 dark:bg-stone-800 overflow-hidden transition-colors duration-300">
             <LogoLoop
               logos={skillsLogos}
               speed={100}
               direction="left"
-              logoHeight={40}
-              gap={45}
+              logoHeight={35}
+              gap={40}
               hoverSpeed={0}
               scaleOnHover
               ariaLabel="Technology partners"
@@ -298,7 +310,7 @@ export default function SkillsSection() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch">
           {skillCategories.map((category) => (
             <SkillCard key={category.title} category={category} />
           ))}
