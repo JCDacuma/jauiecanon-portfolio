@@ -3,7 +3,7 @@ import { projects } from "./projects.js";
 export const ABOUT_ME = `
 # About Me
 
-My name is Jauie Cañon, and I am an aspiring Junior Full-Stack Developer with a Bachelor of Science in Information Technology from Baliwag Polytechnic College, which I completed in 2025.
+My name is Jauie Cañon, and I am a Junior Full-Stack Developer with a Bachelor of Science in Information Technology from Baliwag Polytechnic College, which I completed in 2025.
 
 I started learning web development and building projects in 2024. Since then, I have continuously developed my skills by creating practical web applications and business systems focused on solving real-world problems.
 

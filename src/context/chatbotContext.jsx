@@ -13,7 +13,7 @@ export default function ChatbotProvider({ children }) {
   const [messages, setMessages] = useState([
     {
       role: "model",
-      text: "Hi! I'm Jauie. Welcome to my portfolio! Ask me anything about my work, skills, or background.",
+      text: "Hi! I'm Jauie 👋 Welcome to my portfolio! You can ask me anything about me, my projects, skills, experience, or background.",
     },
   ]);
   const [loading, setLoading] = useState(false);

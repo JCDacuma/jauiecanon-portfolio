@@ -3,6 +3,7 @@ import { ABOUT_ME } from "./info/aboutme.js";
 import { Certificates } from "./info/certificates.js";
 import { Experience } from "./info/experience.js";
 import { serviceOffered } from "./info/service.js";
+import { ContactDetails } from "./info/contact-details.js";
 
 export async function POST(request) {
   try {
@@ -43,13 +44,15 @@ export async function POST(request) {
         --- SERVICES OFFERED ---
         ${serviceOffered}
         
+        --- Contacting/Scheduling ---
+        ${ContactDetails}
+
         --- Experience ---
         ${Experience}
         
         --- Certificates ---
         ${Certificates}
         
-     
         --- END ---`,
       },
     });

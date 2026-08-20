@@ -88,8 +88,6 @@ function useReducedMotion() {
   return reduced;
 }
 
-// Tracks real visible viewport height so the panel resizes as the
-// mobile keyboard opens/closes instead of getting pushed offscreen.
 function useViewportHeight() {
   const getHeight = () =>
     typeof window === "undefined"
@@ -199,7 +197,6 @@ export default function Chatbot() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const typedRef = useRef(new Set());
-
   const isMobile = useIsMobile();
   const viewportHeight = useViewportHeight();
 
@@ -219,7 +216,6 @@ export default function Chatbot() {
     return () => clearTimeout(timeout);
   }, [isOpenChatBox]);
 
-  // Lock background scroll while the fullscreen mobile chat is open
   useEffect(() => {
     if (isOpenChatBox && isMobile) {
       const original = document.body.style.overflow;
@@ -238,7 +234,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed inset-x-3 bottom-3 z-50 flex flex-col items-end sm:inset-x-auto sm:right-6 sm:bottom-6">
+    <div className="fixed inset-x-3 bottom-3 z-50 h-14 w-14 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:h-16 sm:w-16">
       <AnimatePresence>
         {!isOpenChatBox && (
           <motion.button
@@ -251,9 +247,8 @@ export default function Chatbot() {
             transition={{ type: "spring", stiffness: 400, damping: 24 }}
             whileHover={{ scale: 1.06 }}
             whileTap={{ scale: 0.94 }}
-            className="group relative ml-auto flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 shadow-[0_8px_28px_rgba(16,185,129,0.4)] sm:h-16 sm:w-16"
+            className="group absolute bottom-0 right-0 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 shadow-[0_8px_28px_rgba(16,185,129,0.4)] sm:h-16 sm:w-16"
           >
-            {/* hover glow */}
             <span className="absolute inset-0 rounded-full bg-white/0 transition-colors duration-300 group-hover:bg-white/10" />
             <svg
               viewBox="0 0 24 24"
@@ -286,9 +281,9 @@ export default function Chatbot() {
               mass: 0.9,
             }}
             style={isMobile ? { height: viewportHeight } : undefined}
-            className={`flex w-full flex-col overflow-hidden
+            className={`flex flex-col overflow-hidden
               fixed inset-0 rounded-none
-              sm:static sm:h-[480px] sm:w-[22rem] sm:rounded-3xl
+              sm:absolute sm:inset-auto sm:bottom-0 sm:right-0 sm:h-[480px] sm:w-[22rem] sm:rounded-3xl
               md:h-[520px] md:w-[24rem]
               lg:h-[540px] lg:w-[25rem]
               xl:h-[560px] xl:w-[26rem]
@@ -330,7 +325,6 @@ export default function Chatbot() {
                 </svg>
               </button>
             </div>
-
             <div
               className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
               aria-live="polite"
@@ -365,7 +359,6 @@ export default function Chatbot() {
               {loading && <WaitingIndicator />}
               <div ref={messagesEndRef} />
             </div>
-
             <form
               onSubmit={handleSubmit}
               className="flex items-center gap-2 border-t border-stone-200 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] dark:border-stone-800"
