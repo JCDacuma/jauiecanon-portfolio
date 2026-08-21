@@ -14,7 +14,7 @@ const defaultProjects = [
   },
   {
     image: "/projects/logistics_img/main_logistics.svg",
-    title: "Order and Dispatch Management System",
+    title: "Order Fulfillment and Delivery Management System",
     description:
       "Streamlines logistics operations by combining order management, driver dispatch, and real-time tracking into a single, seamless platform.",
     tags: ["React", "TypeScript", "Tailwind", "Laravel", "MySQL", "Redis"],
@@ -22,18 +22,19 @@ const defaultProjects = [
   },
   {
     image: "/projects/pmms_img/main_pmms.svg",
-    title: "Preventive Maintenance Management System for IT Equipment",
+    title: "Preventive Maintenance Management System (PMMS)",
     description:
       "A web application that streamlines the process of managing preventive maintenance schedules, tasks, and equipment history.",
-    tags: ["Css3", "Html5", "JavaScript", "Bootstrap5", "PHP", "MySQL"],
+    tags: ["PHP", "MySQL", "JavaScript", "Bootstrap5", "Css3", "Html5"],
     liveUrl: "/projects/pmms",
   },
   {
     image: "/projects/project-4.jpg",
-    title: "Project Four",
+    title:
+      "DevAidKit (Web-Based All-in-One Developer Toolkit & Productivity Platform)",
     description:
-      "A short, clear line about what this project does and the problem it solves.",
-    tags: ["React Native", "Expo"],
+      "a browser-based developer utility suite crafted to simplify everyday coding tasks. Access code formatters, HTTP request builders, database helpers, security tools, and CSS generators instantly without leaving your browser.",
+    tags: ["NextJs", "TypeScript", "TailwindCSS"],
     liveUrl: "/projects/project-four",
   },
 ];

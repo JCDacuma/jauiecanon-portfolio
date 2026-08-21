@@ -131,18 +131,20 @@ export default function AboutMeSection() {
           >
             <div className="space-y-4">
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-base sm:text-lg transition-colors duration-300">
-                I am a {age}-year-old Full Stack Web Developer holding a
+                I am a {age}-year-old Full Stack Web Developer and a graduate of
                 Bachelor of Science in Information Technology from Baliwag
-                Polytechnic College. Operating as an independent freelance
-                developer since 2024, I specialize in building practical,
-                high-performance business applications.
+                Polytechnic College. I began my journey in web development
+                before 2024 and have continued to build my knowledge through
+                freelance projects, independent learning, and hands-on
+                experience.
               </p>
+
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-base sm:text-lg transition-colors duration-300">
-                My work focuses on engineering tailor-made digital systems
-                including custom Point of Sale (POS) tools, inventory tracking
-                systems, e-commerce platforms, logistics management software,
-                and enterprise solutions designed to solve real-world
-                operational challenges.
+                I am passionate about creating practical, reliable, and
+                user-focused digital solutions that address real-world needs. I
+                am committed to continuous learning, exploring new technologies,
+                and expanding my capabilities in web and application development
+                while delivering meaningful solutions through technology.
               </p>
             </div>
           </motion.div>

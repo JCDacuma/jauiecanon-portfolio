@@ -29,10 +29,6 @@ const defaultServices = [
   },
 ];
 
-// Soft-UI tokens — kept intentionally light so the effect reads as a subtle
-// lift rather than a heavy skeuomorphic surface. Two-tone shadow (a soft dark
-// side + a soft light side) is what sells "neumorphism"; low opacity + small
-// blur radius is what keeps it feeling clean and minimalist.
 const RAISED_SM =
   "shadow-[3px_3px_8px_rgba(168,162,158,0.35),-3px_-3px_8px_rgba(255,255,255,0.75)] " +
   "dark:shadow-[3px_3px_10px_rgba(0,0,0,0.45),-3px_-3px_10px_rgba(255,255,255,0.02)]";
@@ -74,9 +70,6 @@ function ServiceRow({ service, index }) {
         ${inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
       `}
     >
-      {/* Icon badge — the one place the raised/pressed neumorphic pair lives.
-          Sits flush against the same bg.stone-50/800 as the page, so the shadow
-          alone reads as "form", not a boxed icon container. */}
       <div
         className={`
           flex h-11 w-11 shrink-0 items-center justify-center rounded-full
@@ -94,8 +87,7 @@ function ServiceRow({ service, index }) {
           <h3 className="text-lg sm:text-xl font-semibold text-stone-900 dark:text-stone-50 tracking-tight transition-colors duration-300">
             {title}
           </h3>
-          {/* Pressed (inset) affordance on hover — a quiet nod to "press this"
-              without adding a visible button chrome. */}
+
           <span
             className={`
               hidden sm:flex h-8 w-8 shrink-0 items-center justify-center rounded-full
