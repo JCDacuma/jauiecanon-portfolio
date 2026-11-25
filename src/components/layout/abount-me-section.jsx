@@ -140,7 +140,7 @@ export default function AboutMeSection() {
               </p>
 
               <p className="text-stone-600 dark:text-stone-300 leading-relaxed text-base sm:text-lg transition-colors duration-300">
-                I am passionate about creating practical, reliable, and
+                I am passionate about creating practical , reliable, and
                 user-focused digital solutions that address real-world needs. I
                 am committed to continuous learning, exploring new technologies,
                 and expanding my capabilities in web and application development
